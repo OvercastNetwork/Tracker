@@ -5,16 +5,12 @@ import org.bukkit.plugin.java.JavaPlugin;
 
 import tc.oc.tracker.ExplosiveTracker;
 import tc.oc.tracker.Trackers;
-import tc.oc.tracker.base.FakeExplosiveTracker;
 import tc.oc.tracker.base.SimpleExplosiveTracker;
 
 public class TrackerPlugin extends JavaPlugin {
     @Override
     public void onDisable() {
-        ExplosiveTracker oldExplosiveTracker = Trackers.getExplosiveTracker();
-        if(oldExplosiveTracker instanceof SimpleExplosiveTracker) {
-            Trackers.setExplosiveTracker(new FakeExplosiveTracker());
-        }
+        Trackers.getManager().clearTracker(ExplosiveTracker.class, SimpleExplosiveTracker.class);
     }
 
     @Override
@@ -22,7 +18,7 @@ public class TrackerPlugin extends JavaPlugin {
         ExplosiveTracker explosiveTracker = new SimpleExplosiveTracker();
 
         this.registerEvents(new ExplosiveListener(explosiveTracker));
-        Trackers.setExplosiveTracker(explosiveTracker);
+        Trackers.getManager().setRealTracker(ExplosiveTracker.class, explosiveTracker);
     }
 
     private void registerEvents(Listener listener) {

@@ -2,23 +2,25 @@ package tc.oc.tracker;
 
 import javax.annotation.Nonnull;
 
-import tc.oc.tracker.base.FakeExplosiveTracker;
-
-import com.google.common.base.Preconditions;
+import tc.oc.tracker.base.SimpleTrackerManager;
 
 
 public final class Trackers {
     private Trackers() { }
 
-    private static @Nonnull ExplosiveTracker explosiveTracker = new FakeExplosiveTracker();
-
-    public static @Nonnull ExplosiveTracker getExplosiveTracker() {
-        return explosiveTracker;
+    public static @Nonnull TrackerManager getManager() {
+        if(manager == null) {
+            manager = new SimpleTrackerManager();
+        }
+        return manager;
     }
 
-    public static void setExplosiveTracker(@Nonnull ExplosiveTracker newExplosiveTracker) {
-        Preconditions.checkNotNull(newExplosiveTracker, "new explosive tracker");
-
-        explosiveTracker = newExplosiveTracker;
+    /**
+     * Utility method for {@link TrackerManager#getTracker}
+     */
+    public static <T extends Tracker> T getTracker(@Nonnull Class<T> trackerClass) {
+        return getManager().getTracker(trackerClass);
     }
+
+    private static TrackerManager manager;
 }
