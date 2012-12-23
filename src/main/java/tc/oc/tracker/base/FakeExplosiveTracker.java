@@ -8,8 +8,13 @@ import org.bukkit.block.Block;
 import org.bukkit.entity.TNTPrimed;
 
 import tc.oc.tracker.ExplosiveTracker;
+import tc.oc.tracker.Trackers;
 
 public class FakeExplosiveTracker extends FakeTracker implements ExplosiveTracker {
+    static {
+        Trackers.getManager().setFakeTracker(ExplosiveTracker.class, new FakeExplosiveTracker());
+    }
+
     public boolean hasOwner(@Nonnull TNTPrimed entity) {
         return false;
     }
