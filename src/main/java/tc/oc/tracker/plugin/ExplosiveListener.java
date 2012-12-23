@@ -1,16 +1,11 @@
 package tc.oc.tracker.plugin;
 
-import java.util.HashMap;
-import java.util.LinkedList;
 import java.util.List;
 import java.util.Map;
 
-import javax.annotation.Nullable;
-
 import org.bukkit.Material;
+import org.bukkit.OfflinePlayer;
 import org.bukkit.block.Block;
-import org.bukkit.entity.Entity;
-import org.bukkit.entity.Player;
 import org.bukkit.entity.TNTPrimed;
 import org.bukkit.event.EventHandler;
 import org.bukkit.event.EventPriority;
@@ -23,54 +18,49 @@ import org.bukkit.event.entity.ExplosionPrimeEvent;
 
 import tc.oc.tracker.ExplosiveTracker;
 
-// FIXME: code copy & pasted from PGM -- needs to be reworked
-public class ExplosiveListener implements Listener {
-    private final Map<Block, Player> tntBlockPlayerMap = new HashMap<Block, Player>();
-    private static final Map<Entity, Player> tntEntityPlayerMap = new HashMap<Entity, Player>();
+import com.google.common.collect.Lists;
+import com.google.common.collect.Maps;
 
+public class ExplosiveListener implements Listener {
     private final ExplosiveTracker tracker;
 
     public ExplosiveListener(ExplosiveTracker tracker) {
         this.tracker = tracker;
     }
 
-    public static @Nullable Player getTNTOwner(Entity tnt) {
-        return tntEntityPlayerMap.get(tnt);
-    }
-
-    public static void setTNTOwner(Player owner, Entity tnt) {
-        tntEntityPlayerMap.put(tnt, owner);
-    }
-
     @EventHandler(priority = EventPriority.MONITOR, ignoreCancelled = true)
     public void onBlockPlace(BlockPlaceEvent event) {
         if(event.getBlock().getType() == Material.TNT) {
-            this.tntBlockPlayerMap.put(event.getBlock(), event.getPlayer());
+            this.tracker.setPlacer(event.getBlock(), event.getPlayer());
         }
     }
 
     @EventHandler(priority = EventPriority.MONITOR, ignoreCancelled = true)
     public void onBlockBreak(BlockBreakEvent event) {
-        if(this.tntBlockPlayerMap.containsKey(event.getBlock())) {
-            this.tntBlockPlayerMap.remove(event.getBlock());
-        }
+        this.tracker.setPlacer(event.getBlock(), null);
     }
 
     @EventHandler(priority = EventPriority.MONITOR, ignoreCancelled = true)
     public void onBlockPistonExtend(BlockPistonExtendEvent event) {
-        Map<Block, Player> updated = new HashMap<Block, Player>();
-        List<Block> toremove = new LinkedList<Block>();
+        Map<Block, OfflinePlayer> updated = Maps.newHashMap();
+        List<Block> toremove = Lists.newLinkedList();
+
         for(Block block : event.getBlocks()) {
-            Player player = this.tntBlockPlayerMap.get(block);
-            if(player != null) {
+            OfflinePlayer placer = this.tracker.getPlacer(block);
+            if(placer != null) {
                 toremove.add(block);
-                updated.put(block.getRelative(event.getDirection()), player);
+                updated.put(block.getRelative(event.getDirection()), placer);
             }
         }
+
         for(Block block : toremove) {
-            this.tntBlockPlayerMap.remove(block);
+            OfflinePlayer newPlacer = updated.remove(block);
+            this.tracker.setPlacer(block, newPlacer);
         }
-        this.tntBlockPlayerMap.putAll(updated);
+
+        for(Map.Entry<Block, OfflinePlayer> entry : updated.entrySet()) {
+            this.tracker.setPlacer(entry.getKey(), entry.getValue());
+        }
     }
 
     @EventHandler(priority = EventPriority.MONITOR, ignoreCancelled = true)
@@ -78,20 +68,25 @@ public class ExplosiveListener implements Listener {
         if(event.isSticky()) {
             Block newBlock = event.getBlock().getRelative(event.getDirection());
             Block oldBlock = newBlock.getRelative(event.getDirection());
-            Player player = this.tntBlockPlayerMap.get(oldBlock);
+            OfflinePlayer player = this.tracker.getPlacer(oldBlock);
             if(player != null) {
-                this.tntBlockPlayerMap.remove(oldBlock);
-                this.tntBlockPlayerMap.put(newBlock, player);
+                this.tracker.setPlacer(oldBlock, null);
+                this.tracker.setPlacer(newBlock, player);
             }
         }
     }
 
     @EventHandler(priority = EventPriority.MONITOR, ignoreCancelled = true)
     public void onTNTIgnite(ExplosionPrimeEvent event) {
-        Block block = event.getEntity().getWorld().getBlockAt(event.getEntity().getLocation());
-        Player player = this.tntBlockPlayerMap.get(block);
-        if(player != null && event.getEntity() instanceof TNTPrimed) {
-            setTNTOwner(player, event.getEntity());
+        if(event.getEntity() instanceof TNTPrimed) {
+            TNTPrimed tnt = (TNTPrimed) event.getEntity();
+            Block block = event.getEntity().getWorld().getBlockAt(event.getEntity().getLocation());
+            if(block != null) {
+                OfflinePlayer placer = this.tracker.setPlacer(block, null);
+                if(placer != null) {
+                    this.tracker.setOwner(tnt, placer);
+                }
+            }
         }
     }
 }
