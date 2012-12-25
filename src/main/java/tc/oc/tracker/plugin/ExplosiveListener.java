@@ -30,6 +30,8 @@ public class ExplosiveListener implements Listener {
 
     @EventHandler(priority = EventPriority.MONITOR, ignoreCancelled = true)
     public void onBlockPlace(BlockPlaceEvent event) {
+        if(!this.tracker.isEnabled(event.getBlock().getWorld())) return;
+
         if(event.getBlock().getType() == Material.TNT) {
             this.tracker.setPlacer(event.getBlock(), event.getPlayer());
         }
@@ -37,11 +39,15 @@ public class ExplosiveListener implements Listener {
 
     @EventHandler(priority = EventPriority.MONITOR, ignoreCancelled = true)
     public void onBlockBreak(BlockBreakEvent event) {
+        if(!this.tracker.isEnabled(event.getBlock().getWorld())) return;
+
         this.tracker.setPlacer(event.getBlock(), null);
     }
 
     @EventHandler(priority = EventPriority.MONITOR, ignoreCancelled = true)
     public void onBlockPistonExtend(BlockPistonExtendEvent event) {
+        if(!this.tracker.isEnabled(event.getBlock().getWorld())) return;
+
         Map<Block, Player> updated = Maps.newHashMap();
         List<Block> toremove = Lists.newLinkedList();
 
@@ -65,6 +71,8 @@ public class ExplosiveListener implements Listener {
 
     @EventHandler(priority = EventPriority.MONITOR, ignoreCancelled = true)
     public void onBlockPistonRetract(BlockPistonRetractEvent event) {
+        if(!this.tracker.isEnabled(event.getBlock().getWorld())) return;
+
         if(event.isSticky()) {
             Block newBlock = event.getBlock().getRelative(event.getDirection());
             Block oldBlock = newBlock.getRelative(event.getDirection());
@@ -78,6 +86,8 @@ public class ExplosiveListener implements Listener {
 
     @EventHandler(priority = EventPriority.MONITOR, ignoreCancelled = true)
     public void onTNTIgnite(ExplosionPrimeEvent event) {
+        if(!this.tracker.isEnabled(event.getEntity().getWorld())) return;
+
         if(event.getEntity() instanceof TNTPrimed) {
             TNTPrimed tnt = (TNTPrimed) event.getEntity();
             Block block = event.getEntity().getWorld().getBlockAt(event.getEntity().getLocation());
