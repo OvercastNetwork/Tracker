@@ -15,7 +15,7 @@ import tc.oc.tracker.Lifetime;
 import com.google.common.base.Preconditions;
 import com.google.common.collect.Lists;
 
-public class PlayerLifetime implements Lifetime {
+public class SimpleLifetime implements Lifetime {
     private Instant start;
     private Instant end;
     private final List<Damage> damage = Lists.newArrayList();
