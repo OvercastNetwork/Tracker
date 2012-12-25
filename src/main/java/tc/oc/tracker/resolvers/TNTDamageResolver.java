@@ -11,9 +11,9 @@ import org.bukkit.event.entity.EntityDamageEvent;
 
 import tc.oc.tracker.Damage;
 import tc.oc.tracker.DamageResolver;
-import tc.oc.tracker.ExplosiveTracker;
 import tc.oc.tracker.Lifetime;
 import tc.oc.tracker.damage.TNTDamage;
+import tc.oc.tracker.trackers.ExplosiveTracker;
 
 public class TNTDamageResolver implements DamageResolver {
     private final ExplosiveTracker tracker;

@@ -16,7 +16,7 @@ import org.bukkit.event.block.BlockPistonRetractEvent;
 import org.bukkit.event.block.BlockPlaceEvent;
 import org.bukkit.event.entity.ExplosionPrimeEvent;
 
-import tc.oc.tracker.ExplosiveTracker;
+import tc.oc.tracker.trackers.ExplosiveTracker;
 
 import com.google.common.collect.Lists;
 import com.google.common.collect.Maps;

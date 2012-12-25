@@ -1,4 +1,4 @@
-package tc.oc.tracker.base;
+package tc.oc.tracker.trackers.base;
 
 import javax.annotation.Nonnull;
 import javax.annotation.Nullable;
@@ -7,8 +7,9 @@ import org.bukkit.block.Block;
 import org.bukkit.entity.Player;
 import org.bukkit.entity.TNTPrimed;
 
-import tc.oc.tracker.ExplosiveTracker;
 import tc.oc.tracker.Trackers;
+import tc.oc.tracker.base.FakeTracker;
+import tc.oc.tracker.trackers.ExplosiveTracker;
 
 public class FakeExplosiveTracker extends FakeTracker implements ExplosiveTracker {
     static {

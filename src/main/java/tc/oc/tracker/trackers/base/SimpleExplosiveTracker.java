@@ -1,4 +1,4 @@
-package tc.oc.tracker.base;
+package tc.oc.tracker.trackers.base;
 
 import java.util.Iterator;
 import java.util.Map;
@@ -11,7 +11,8 @@ import org.bukkit.block.Block;
 import org.bukkit.entity.Player;
 import org.bukkit.entity.TNTPrimed;
 
-import tc.oc.tracker.ExplosiveTracker;
+import tc.oc.tracker.base.AbstractTracker;
+import tc.oc.tracker.trackers.ExplosiveTracker;
 
 import com.google.common.base.Preconditions;
 import com.google.common.collect.Maps;

@@ -1,4 +1,4 @@
-package tc.oc.tracker;
+package tc.oc.tracker.trackers;
 
 import javax.annotation.Nonnull;
 import javax.annotation.Nullable;
@@ -6,6 +6,8 @@ import javax.annotation.Nullable;
 import org.bukkit.block.Block;
 import org.bukkit.entity.Player;
 import org.bukkit.entity.TNTPrimed;
+
+import tc.oc.tracker.Tracker;
 
 public interface ExplosiveTracker extends Tracker {
     boolean hasOwner(@Nonnull TNTPrimed entity);
