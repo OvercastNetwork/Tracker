@@ -6,9 +6,9 @@ import java.util.Map;
 import javax.annotation.Nonnull;
 import javax.annotation.Nullable;
 
-import org.bukkit.OfflinePlayer;
 import org.bukkit.World;
 import org.bukkit.block.Block;
+import org.bukkit.entity.Player;
 import org.bukkit.entity.TNTPrimed;
 
 import tc.oc.tracker.ExplosiveTracker;
@@ -17,8 +17,8 @@ import com.google.common.base.Preconditions;
 import com.google.common.collect.Maps;
 
 public class SimpleExplosiveTracker extends AbstractTracker implements ExplosiveTracker {
-    private final Map<Block, OfflinePlayer> placedBlocks = Maps.newHashMap();
-    private final Map<TNTPrimed, OfflinePlayer> ownedTNTs = Maps.newHashMap();
+    private final Map<Block, Player> placedBlocks = Maps.newHashMap();
+    private final Map<TNTPrimed, Player> ownedTNTs = Maps.newHashMap();
 
     public boolean hasOwner(@Nonnull TNTPrimed entity) {
         Preconditions.checkNotNull(entity, "tnt entity");
@@ -26,13 +26,13 @@ public class SimpleExplosiveTracker extends AbstractTracker implements Explosive
         return this.ownedTNTs.containsKey(entity);
     }
 
-    public @Nullable OfflinePlayer getOwner(@Nonnull TNTPrimed entity) {
+    public @Nullable Player getOwner(@Nonnull TNTPrimed entity) {
         Preconditions.checkNotNull(entity, "tnt entity");
 
         return this.ownedTNTs.get(entity);
     }
 
-    public @Nullable OfflinePlayer setOwner(@Nonnull TNTPrimed entity, @Nullable OfflinePlayer player) {
+    public @Nullable Player setOwner(@Nonnull TNTPrimed entity, @Nullable Player player) {
         Preconditions.checkNotNull(entity, "tnt entity");
 
         if(player != null) {
@@ -48,13 +48,13 @@ public class SimpleExplosiveTracker extends AbstractTracker implements Explosive
         return this.placedBlocks.containsKey(block);
     }
 
-    public @Nullable OfflinePlayer getPlacer(@Nonnull Block block) {
+    public @Nullable Player getPlacer(@Nonnull Block block) {
         Preconditions.checkNotNull(block, "block");
 
         return this.placedBlocks.get(block);
     }
 
-    public @Nullable OfflinePlayer setPlacer(@Nonnull Block block, @Nullable OfflinePlayer player) {
+    public @Nullable Player setPlacer(@Nonnull Block block, @Nullable Player player) {
         Preconditions.checkNotNull(block, "block");
 
         if(player != null) {
@@ -72,7 +72,7 @@ public class SimpleExplosiveTracker extends AbstractTracker implements Explosive
     @Override
     protected void onDisable(World world) {
         // clear information about blocks in that world
-        for(Iterator<Map.Entry<Block, OfflinePlayer>> it = this.placedBlocks.entrySet().iterator(); it.hasNext(); ) {
+        for(Iterator<Map.Entry<Block, Player>> it = this.placedBlocks.entrySet().iterator(); it.hasNext(); ) {
             Block block = it.next().getKey();
             if(block.getWorld().equals(world)) {
                 it.remove();
@@ -80,7 +80,7 @@ public class SimpleExplosiveTracker extends AbstractTracker implements Explosive
         }
 
         // clear information about entities in that world
-        for(Iterator<Map.Entry<TNTPrimed, OfflinePlayer>> it = this.ownedTNTs.entrySet().iterator(); it.hasNext(); ) {
+        for(Iterator<Map.Entry<TNTPrimed, Player>> it = this.ownedTNTs.entrySet().iterator(); it.hasNext(); ) {
             TNTPrimed tnt = it.next().getKey();
             if(tnt.getWorld().equals(world)) {
                 it.remove();

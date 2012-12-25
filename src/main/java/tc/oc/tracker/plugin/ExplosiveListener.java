@@ -4,8 +4,8 @@ import java.util.List;
 import java.util.Map;
 
 import org.bukkit.Material;
-import org.bukkit.OfflinePlayer;
 import org.bukkit.block.Block;
+import org.bukkit.entity.Player;
 import org.bukkit.entity.TNTPrimed;
 import org.bukkit.event.EventHandler;
 import org.bukkit.event.EventPriority;
@@ -42,11 +42,11 @@ public class ExplosiveListener implements Listener {
 
     @EventHandler(priority = EventPriority.MONITOR, ignoreCancelled = true)
     public void onBlockPistonExtend(BlockPistonExtendEvent event) {
-        Map<Block, OfflinePlayer> updated = Maps.newHashMap();
+        Map<Block, Player> updated = Maps.newHashMap();
         List<Block> toremove = Lists.newLinkedList();
 
         for(Block block : event.getBlocks()) {
-            OfflinePlayer placer = this.tracker.getPlacer(block);
+            Player placer = this.tracker.getPlacer(block);
             if(placer != null) {
                 toremove.add(block);
                 updated.put(block.getRelative(event.getDirection()), placer);
@@ -54,11 +54,11 @@ public class ExplosiveListener implements Listener {
         }
 
         for(Block block : toremove) {
-            OfflinePlayer newPlacer = updated.remove(block);
+            Player newPlacer = updated.remove(block);
             this.tracker.setPlacer(block, newPlacer);
         }
 
-        for(Map.Entry<Block, OfflinePlayer> entry : updated.entrySet()) {
+        for(Map.Entry<Block, Player> entry : updated.entrySet()) {
             this.tracker.setPlacer(entry.getKey(), entry.getValue());
         }
     }
@@ -68,7 +68,7 @@ public class ExplosiveListener implements Listener {
         if(event.isSticky()) {
             Block newBlock = event.getBlock().getRelative(event.getDirection());
             Block oldBlock = newBlock.getRelative(event.getDirection());
-            OfflinePlayer player = this.tracker.getPlacer(oldBlock);
+            Player player = this.tracker.getPlacer(oldBlock);
             if(player != null) {
                 this.tracker.setPlacer(oldBlock, null);
                 this.tracker.setPlacer(newBlock, player);
@@ -82,7 +82,7 @@ public class ExplosiveListener implements Listener {
             TNTPrimed tnt = (TNTPrimed) event.getEntity();
             Block block = event.getEntity().getWorld().getBlockAt(event.getEntity().getLocation());
             if(block != null) {
-                OfflinePlayer placer = this.tracker.setPlacer(block, null);
+                Player placer = this.tracker.setPlacer(block, null);
                 if(placer != null) {
                     this.tracker.setOwner(tnt, placer);
                 }
