@@ -1,11 +1,11 @@
 package tc.oc.tracker.base;
 
+import java.util.Collection;
 import java.util.Collections;
 import java.util.List;
 import java.util.Set;
 
 import javax.annotation.Nonnull;
-import javax.annotation.Nullable;
 
 import org.bukkit.entity.Entity;
 import org.bukkit.event.entity.EntityDamageEvent;
@@ -24,7 +24,7 @@ public class SimpleResolverManager implements ResolverManager {
     public boolean isRegistered(@Nonnull DamageResolver resolver) {
         Preconditions.checkNotNull(resolver, "resolver");
 
-        return this.getResolvers().contains(resolver);
+        return this.resolvers.contains(resolver);
     }
 
     public void register(@Nonnull DamageResolver resolver) {
@@ -40,39 +40,78 @@ public class SimpleResolverManager implements ResolverManager {
         this.register(resolver, ImmutableSet.copyOf(before));
     }
 
-    public void register(@Nonnull DamageResolver resolver, @Nonnull Set<Class<? extends DamageResolver>> before) {
+    public void register(@Nonnull DamageResolver resolver, @Nonnull Collection<Class<? extends DamageResolver>> resolversBefore) {
         Preconditions.checkNotNull(resolver, "resolver");
-        Preconditions.checkNotNull(before, "resolvers before");
+        Preconditions.checkNotNull(resolversBefore, "resolvers before");
         Preconditions.checkArgument(!this.isRegistered(resolver), "resolver is already registered");
 
-        this.entries.add(new ResolverEntry(resolver, ImmutableSet.copyOf(before)));
-        this.invalidate();
+        ResolverEntry entry = new ResolverEntry(resolver, ImmutableSet.copyOf(resolversBefore));
+
+        Set<ResolverEntry> before = this.getEntriesBefore(entry);
+        Set<ResolverEntry> after = this.getEntriesAfter(entry);
+
+        int index = 0;
+        for(; index < this.resolvers.size(); index++) {
+            ResolverEntry loopEntry = this.resolvers.get(index);
+
+            before.remove(loopEntry);
+            if(after.contains(loopEntry)) {
+                if(before.isEmpty()) {
+                    break;
+                } else {
+                    throw new IllegalArgumentException("failed to solve constraints (" + resolver + " could not come before " + loopEntry.resolver + ") while obeying all other constraints");
+                }
+            }
+        }
+
+        this.resolvers.add(index, entry);
+    }
+
+    private Set<ResolverEntry> getEntriesBefore(ResolverEntry entry) {
+        Set<ResolverEntry> before = Sets.newHashSet();
+
+        for(ResolverEntry loopEntry : this.resolvers) {
+            if(loopEntry.isBefore(entry)) {
+                before.add(loopEntry);
+            }
+        }
+
+        return before;
+    }
+
+    private Set<ResolverEntry> getEntriesAfter(ResolverEntry entry) {
+        Set<ResolverEntry> after = Sets.newHashSet();
+
+        for(ResolverEntry loopEntry : this.resolvers) {
+            if(loopEntry.isAfter(entry)) {
+                after.add(loopEntry);
+            }
+        }
+
+        return after;
     }
 
     public void unregister(@Nonnull DamageResolver resolver) {
         Preconditions.checkNotNull(resolver, "resolver");
 
-        for(ResolverEntry entry : this.entries) {
-            if(entry.resolver.equals(resolver)) {
-                this.entries.remove(entry);
-                this.invalidate();
-                return;
-            }
-        }
+        this.resolvers.remove(resolver);
     }
 
     public @Nonnull Set<DamageResolver> getResolvers() {
-        if(this.resolvers == null) {
-            this.bake();
+        ImmutableSet.Builder<DamageResolver> resolvers = ImmutableSet.builder();
+
+        for(ResolverEntry entry : this.resolvers) {
+            resolvers.add(entry.resolver);
         }
-        return Collections.unmodifiableSet(this.resolvers);
+
+        return resolvers.build();
     }
 
     public @Nonnull Damage resolve(@Nonnull Entity entity, @Nonnull Lifetime lifetime, @Nonnull EntityDamageEvent damageEvent) {
         Damage damage = null;
 
-        for(DamageResolver resolver : this.getResolvers()) {
-            Damage resolvedDamage = resolver.resolve(entity, lifetime, damageEvent);
+        for(ResolverEntry entry : this.resolvers) {
+            Damage resolvedDamage = entry.resolver.resolve(entity, lifetime, damageEvent);
             if(resolvedDamage != null) {
                 damage = resolvedDamage;
             }
@@ -85,46 +124,7 @@ public class SimpleResolverManager implements ResolverManager {
         return damage;
     }
 
-    private void invalidate() {
-        this.resolvers = null;
-    }
-
-    private void bake() {
-        Set<DamageResolver> resolvers = Sets.newLinkedHashSet();
-
-        for(ResolverEntry entry : this.entries) {
-            this.handle(entry, resolvers, Sets.<Class<? extends DamageResolver>>newHashSet());
-        }
-
-        this.resolvers = resolvers;
-    }
-
-    private void handle(ResolverEntry entry, Set<DamageResolver> resolvers, Set<Class<? extends DamageResolver>> seen) {
-        seen = Sets.newHashSet(seen);
-        for(Class<? extends DamageResolver> cls : entry.before) {
-            if(!seen.add(cls)) {
-                throw new IllegalStateException("infinite loop");
-            }
-
-            ResolverEntry clsEntry = this.getByClass(cls);
-            if(clsEntry != null) {
-                this.handle(clsEntry, resolvers, seen);
-            }
-        }
-        resolvers.add(entry.resolver);
-    }
-
-    private @Nullable ResolverEntry getByClass(@Nonnull Class<? extends DamageResolver> resolverClass) {
-        for(ResolverEntry entry : this.entries) {
-            if(resolverClass.isInstance(entry.resolver)) {
-                return entry;
-            }
-        }
-        return null;
-    }
-
-    private final @Nonnull List<ResolverEntry> entries = Lists.newArrayList();
-    private @Nullable Set<DamageResolver> resolvers = null;
+    private final @Nonnull List<ResolverEntry> resolvers = Lists.newArrayList();
 
     private static class ResolverEntry {
         public final DamageResolver resolver;
@@ -133,6 +133,33 @@ public class SimpleResolverManager implements ResolverManager {
         public ResolverEntry(DamageResolver resolver, Set<Class<? extends DamageResolver>> before) {
             this.resolver = resolver;
             this.before = before;
+        }
+
+        public boolean isBefore(ResolverEntry entry) {
+            for(Class<? extends DamageResolver> cls : entry.before) {
+                if(cls.isInstance(this.resolver)) {
+                    return true;
+                }
+            }
+            return false;
+        }
+
+        public boolean isAfter(ResolverEntry entry) {
+            for(Class<? extends DamageResolver> cls : this.before) {
+                if(cls.isInstance(entry.resolver)) {
+                    return true;
+                }
+            }
+            return false;
+        }
+
+        @Override
+        public boolean equals(Object obj) {
+            if(obj instanceof DamageResolver) {
+                return this.resolver.equals(obj);
+            } else {
+                return super.equals(obj);
+            }
         }
     }
 }
