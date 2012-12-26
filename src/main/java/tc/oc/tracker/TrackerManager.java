@@ -1,9 +1,13 @@
 package tc.oc.tracker;
 
+import java.util.Set;
+
 import javax.annotation.Nonnull;
 import javax.annotation.Nullable;
 
 public interface TrackerManager {
+    Set<Tracker> getTrackers();
+
     boolean hasTracker(@Nonnull Class<? extends Tracker> trackerClass);
 
     boolean hasRealTracker(@Nonnull Class<? extends Tracker> trackerClass);

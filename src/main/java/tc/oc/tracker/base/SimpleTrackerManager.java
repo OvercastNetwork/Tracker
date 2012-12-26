@@ -1,6 +1,7 @@
 package tc.oc.tracker.base;
 
 import java.util.Map;
+import java.util.Set;
 
 import javax.annotation.Nonnull;
 import javax.annotation.Nullable;
@@ -9,9 +10,14 @@ import tc.oc.tracker.Tracker;
 import tc.oc.tracker.TrackerManager;
 
 import com.google.common.base.Preconditions;
+import com.google.common.collect.ImmutableSet;
 import com.google.common.collect.Maps;
 
 public class SimpleTrackerManager implements TrackerManager {
+    public Set<Tracker> getTrackers() {
+        return ImmutableSet.copyOf(this.trackers.values());
+    }
+
     public boolean hasTracker(@Nonnull Class<? extends Tracker> trackerClass) {
         return this.getTracker(trackerClass) != null;
     }
