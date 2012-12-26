@@ -15,6 +15,10 @@ public class TrackerPlugin extends JavaPlugin {
 
     @Override
     public void onEnable() {
+        // basic operation listeners
+        this.registerEvents(new WorldListener(Trackers.getManager()));
+
+        // tracker setup
         ExplosiveTracker explosiveTracker = new SimpleExplosiveTracker();
 
         this.registerEvents(new ExplosiveListener(explosiveTracker));
