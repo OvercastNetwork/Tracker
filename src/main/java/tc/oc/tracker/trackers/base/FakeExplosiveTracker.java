@@ -3,6 +3,7 @@ package tc.oc.tracker.trackers.base;
 import javax.annotation.Nonnull;
 import javax.annotation.Nullable;
 
+import org.bukkit.World;
 import org.bukkit.block.Block;
 import org.bukkit.entity.Player;
 import org.bukkit.entity.TNTPrimed;
@@ -38,5 +39,9 @@ public class FakeExplosiveTracker extends FakeTracker implements ExplosiveTracke
 
     public @Nullable Player setPlacer(@Nonnull Block block, @Nullable Player player) {
         return null;
+    }
+
+    public void clear(@Nonnull World world) {
+        // do nothing
     }
 }

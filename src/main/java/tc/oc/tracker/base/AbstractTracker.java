@@ -26,14 +26,16 @@ public abstract class AbstractTracker implements Tracker {
      *
      * @param world World the tracker is now enabled in
      */
-    protected abstract void onEnable(World world);
+    protected void onEnable(World world) { }
 
     /**
      * Method called when the tracker is disabled for a world.
      *
+     * Will be called before the {@link #clear} method.
+     *
      * @param world World the tracker is now disabled in
      */
-    protected abstract void onDisable(World world);
+    protected void onDisable(World world) { }
 
     // implementation
     private boolean enabled = false;
@@ -107,6 +109,7 @@ public abstract class AbstractTracker implements Tracker {
     private void notifyChange(boolean now, @Nonnull World world) {
         if(now) {
             this.onDisable(world);
+            this.clear(world);
         } else {
             this.onEnable(world);
         }

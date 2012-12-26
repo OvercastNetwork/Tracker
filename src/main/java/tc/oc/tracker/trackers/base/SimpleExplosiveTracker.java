@@ -65,13 +65,9 @@ public class SimpleExplosiveTracker extends AbstractTracker implements Explosive
         }
     }
 
-    @Override
-    protected void onEnable(World world) {
-        // do nothing
-    }
+    public void clear(@Nonnull World world) {
+        Preconditions.checkNotNull(world, "world");
 
-    @Override
-    protected void onDisable(World world) {
         // clear information about blocks in that world
         for(Iterator<Map.Entry<Block, Player>> it = this.placedBlocks.entrySet().iterator(); it.hasNext(); ) {
             Block block = it.next().getKey();

@@ -62,4 +62,13 @@ public interface Tracker {
      * @throws NullPointerException if world is null
      */
     boolean disable(@Nonnull World world);
+
+    /**
+     * Clears stored information regarding the specified world.
+     *
+     * @param world Specified world
+     *
+     * @throws NullPointerException if world is null
+     */
+    void clear(@Nonnull World world);
 }
