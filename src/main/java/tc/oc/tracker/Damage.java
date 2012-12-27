@@ -25,6 +25,8 @@ public interface Damage {
     /**
      * Gets the location where the damage occurred.
      *
+     * Contract specifies that the result is never null.
+     *
      * @return Location of damage
      */
     @Nonnull Location getLocation();
@@ -32,12 +34,16 @@ public interface Damage {
     /**
      * Gets the time that the damage occurred.
      *
+     * Contract specifies that the result is never null.
+     *
      * @return Time of damage
      */
     @Nonnull Instant getTime();
 
     /**
      * Gets the resolved living damager if there is one.
+     *
+     * Contract specifies nothing about this field.
      *
      * @return Resolved damager or null if there is not one
      */

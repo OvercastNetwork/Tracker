@@ -9,6 +9,7 @@ import org.bukkit.event.entity.EntityDamageEvent;
 import org.joda.time.Instant;
 
 import tc.oc.tracker.Damage;
+import tc.oc.tracker.util.DamageContract;
 
 import com.google.common.base.Preconditions;
 
@@ -20,7 +21,7 @@ public abstract class AbstractDamageBuilder<T extends AbstractDamageBuilder<T>> 
     protected abstract @Nonnull T me();
 
     public @Nonnull T hearts(int hearts) {
-        Preconditions.checkArgument(hearts > 0, "hearts must be greater than 0");
+        DamageContract.checkHearts(hearts);
 
         this.hearts = hearts;
 
@@ -28,7 +29,7 @@ public abstract class AbstractDamageBuilder<T extends AbstractDamageBuilder<T>> 
     }
 
     public @Nonnull T location(@Nonnull Location newLocation) {
-        Preconditions.checkNotNull(newLocation, "new location");
+        DamageContract.checkLocation(newLocation);
 
         this.location = newLocation.clone();
 
@@ -36,7 +37,7 @@ public abstract class AbstractDamageBuilder<T extends AbstractDamageBuilder<T>> 
     }
 
     public @Nonnull T time(@Nonnull Instant time) {
-        Preconditions.checkNotNull(time, "time");
+        DamageContract.checkTime(time);
 
         this.time = time;
 
@@ -44,28 +45,29 @@ public abstract class AbstractDamageBuilder<T extends AbstractDamageBuilder<T>> 
     }
 
     public @Nonnull T resolvedDamager(@Nullable LivingEntity resolvedDamager) {
-        this.resolvedDamager = resolvedDamager;
+        DamageContract.checkResolvedDamager(resolvedDamager);
 
         return this.me();
     }
 
     public @Nonnull T base(@Nonnull Damage base) {
-        Preconditions.checkNotNull(base, "base");
+        DamageContract.checkDamage(base);
 
-        this.hearts(base.getHearts());
-        this.location(base.getLocation());
-        this.time(base.getTime());
-        this.resolvedDamager(base.getResolvedDamager());
+        this.hearts = base.getHearts();
+        this.location = base.getLocation().clone();
+        this.time = base.getTime();
+        this.resolvedDamager = base.getResolvedDamager();
 
         return this.me();
     }
 
     public @Nonnull T base(@Nonnull EntityDamageEvent event) {
         Preconditions.checkNotNull(event, "entity damage event");
+        DamageContract.checkHearts(event.getDamage());
 
-        this.hearts(event.getDamage());
-        this.location(event.getEntity().getLocation());
-        this.time(Instant.now());
+        this.hearts = event.getDamage();
+        this.location = event.getEntity().getLocation().clone();
+        this.time = Instant.now();
 
         return this.me();
     }

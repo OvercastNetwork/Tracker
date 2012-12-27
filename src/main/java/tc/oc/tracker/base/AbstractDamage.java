@@ -8,8 +8,7 @@ import org.bukkit.entity.LivingEntity;
 import org.joda.time.Instant;
 
 import tc.oc.tracker.Damage;
-
-import com.google.common.base.Preconditions;
+import tc.oc.tracker.util.DamageContract;
 
 public abstract class AbstractDamage implements Damage {
     private final int hearts;
@@ -22,10 +21,10 @@ public abstract class AbstractDamage implements Damage {
     }
 
     public AbstractDamage(int hearts, @Nonnull Location location, @Nonnull Instant time, @Nullable LivingEntity resolvedDamager) {
-        Preconditions.checkArgument(hearts > 0, "hearts must be greater than zero");
-        Preconditions.checkNotNull(location, "location");
-        Preconditions.checkNotNull(time, "time");
-        Preconditions.checkNotNull(resolvedDamager, "resolved damager");
+        DamageContract.checkHearts(hearts);
+        DamageContract.checkLocation(location);
+        DamageContract.checkTime(time);
+        DamageContract.checkResolvedDamager(resolvedDamager);
 
         this.hearts = hearts;
         this.location = location;
