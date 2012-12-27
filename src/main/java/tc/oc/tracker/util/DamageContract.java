@@ -11,9 +11,11 @@ import com.google.common.base.Preconditions;
 /**
  * Provides utility methods for checking the contract for Damage objects.
  *
- * @see Damage for contract
+ * @see Damage
  */
 public final class DamageContract {
+    private DamageContract() { }
+
     /**
      * Checks to ensure that the the specified damage object satisfies all
      * contracts.
