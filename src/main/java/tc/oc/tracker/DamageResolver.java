@@ -7,5 +7,5 @@ import org.bukkit.entity.Entity;
 import org.bukkit.event.entity.EntityDamageEvent;
 
 public interface DamageResolver {
-    @Nullable Damage resolve(@Nonnull Entity entity, @Nonnull Lifetime lifetime, @Nonnull EntityDamageEvent damageEvent);
+    @Nullable DamageInfo resolve(@Nonnull Entity entity, @Nonnull Lifetime lifetime, @Nonnull EntityDamageEvent damageEvent);
 }

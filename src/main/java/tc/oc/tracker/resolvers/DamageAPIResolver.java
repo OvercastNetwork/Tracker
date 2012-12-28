@@ -19,7 +19,7 @@ import tc.oc.tracker.*;
  */
 public class DamageAPIResolver implements DamageResolver {
     /** @see DamageResolvers#resolve */
-    public @Nullable Damage resolve(@Nonnull Entity entity, @Nonnull Lifetime lifetime, @Nonnull EntityDamageEvent damageEvent) {
-        return DamageAPI.getDamage(damageEvent);
+    public @Nullable DamageInfo resolve(@Nonnull Entity entity, @Nonnull Lifetime lifetime, @Nonnull EntityDamageEvent damageEvent) {
+        return DamageAPI.getAPIDamage(damageEvent);
     }
 }

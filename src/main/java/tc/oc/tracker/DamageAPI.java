@@ -10,7 +10,9 @@ import org.bukkit.Bukkit;
 import org.bukkit.entity.LivingEntity;
 import org.bukkit.event.entity.EntityDamageEvent;
 import org.bukkit.event.entity.EntityDamageEvent.DamageCause;
+import org.joda.time.Instant;
 
+import tc.oc.tracker.base.SimpleDamage;
 import tc.oc.tracker.resolvers.DamageAPIResolver;
 
 import com.google.common.base.Preconditions;
@@ -24,8 +26,8 @@ public final class DamageAPI {
     /**
      * Calls {@link #inflictDamage} with force off.
      */
-    public static boolean inflictDamage(@Nonnull LivingEntity entity, @Nonnull Damage damage) {
-        return inflictDamage(entity, damage, false);
+    public static @Nullable Damage inflictDamage(@Nonnull LivingEntity entity, int hearts, @Nonnull DamageInfo info) {
+        return inflictDamage(entity, hearts, info, false);
     }
 
     /**
@@ -34,34 +36,39 @@ public final class DamageAPI {
      * This method will call the appropriate damage method and fire an {@link EntityDamageEvent}.
      *
      * @param entity Entity to inflict damage upon
-     * @param damage Damage object that describes this bit of damage
+     * @param hearts Amount of half-hearts of damage to inflict
+     * @param info {@link DamageInfo} object that details the type of damage
      * @param force Indicates whether this method should respect cancellations
-     * @return
+     * @return the final {@link Damage} object or null if the damage was cancelled
+     *
+     * @throws NullPointerException if entity or info is null
+     * @throws IllegalArgumentExcpetion if hearts is less than zero
      */
-    public static boolean inflictDamage(@Nonnull LivingEntity entity, @Nonnull Damage damage, boolean force) {
+    public static @Nullable Damage inflictDamage(@Nonnull LivingEntity entity, int hearts, @Nonnull DamageInfo info, boolean force) {
         Preconditions.checkNotNull(entity, "living entity");
-        Preconditions.checkNotNull(damage, "damage");
+        Preconditions.checkArgument(hearts >= 0, "hearts must be greater than or equal to zero");
+        Preconditions.checkNotNull(info, "damage info");
 
-        EntityDamageEvent event = new EntityDamageEvent(entity, DamageCause.CUSTOM, damage.getHearts());
-        setAPIDamage(event, damage);
+        EntityDamageEvent event = new EntityDamageEvent(entity, DamageCause.CUSTOM, hearts);
+        setAPIDamage(event, info);
 
         Bukkit.getPluginManager().callEvent(event);
 
         if(event.isCancelled() && !force) {
-            return false;
+            return null;
         }
 
-        entity.damage(damage.getHearts());
+        entity.damage(event.getDamage());
 
         setAPIDamage(event, null);
 
-        return true;
+        return getDamage(event);
     }
 
-    private static @Nonnull Map<EntityDamageEvent, Damage> apiDamageMapping = new HashMap<EntityDamageEvent, Damage>();
+    private static @Nonnull Map<EntityDamageEvent, DamageInfo> apiDamageMapping = new HashMap<EntityDamageEvent, DamageInfo>();
 
     /**
-     * Fetches the given {@link Damage} object specified by
+     * Fetches the given {@link DamageInfo} object specified by
      * {@link #inflictDamage} so it can be fetched by the
      * {@link DamageAPIResolver} when plugins who listen to the Bukkit event
      * ask for it.
@@ -70,32 +77,33 @@ public final class DamageAPI {
      * the same through stable version releases.
      *
      * @param event EntityDamageEvent to fetch the given damage for
-     * @return Stored damage instance of null if none is stored
+     * @return Stored damage info or null if none is stored
      *
      * @throws NullPointerException if event is null
      */
-    public static @Nullable Damage getAPIDamage(@Nonnull EntityDamageEvent event) {
+    public static @Nullable DamageInfo getAPIDamage(@Nonnull EntityDamageEvent event) {
         Preconditions.checkNotNull(event, "entity damage event");
 
         return apiDamageMapping.get(event);
     }
 
     /**
-     * Sets the API damage that corresponds to the specified event.
+     * Sets the API damage info that corresponds to the specified event.
      *
      * Intended for internal use only, so this method is not guaranteed to stay
      * the same through stable version releases.
      *
      * @param event Specified event
-     * @param damage Damage object that represents the damage for the event
+     * @param damage Damage info that describes the damage or null to clear the
+     *               store information
      *
      * @throws NullPointerException if event is null
      */
-    public static void setAPIDamage(@Nonnull EntityDamageEvent event, @Nullable Damage damage) {
+    public static void setAPIDamage(@Nonnull EntityDamageEvent event, @Nullable DamageInfo info) {
         Preconditions.checkNotNull(event, "entity damage event");
 
-        if(damage != null) {
-            apiDamageMapping.put(event, damage);
+        if(info != null) {
+            apiDamageMapping.put(event, info);
         } else {
             apiDamageMapping.remove(event);
         }
@@ -117,6 +125,9 @@ public final class DamageAPI {
         LivingEntity entity = (LivingEntity) event.getEntity();
         Lifetime lifetime = Lifetimes.getLifetime(entity);
 
-        return DamageResolvers.getManager().resolve(entity, lifetime, event);
+        DamageInfo info = DamageResolvers.getManager().resolve(entity, lifetime, event);
+
+        // FIXME: should not return the current time
+        return new SimpleDamage(event.getDamage(), event.getEntity().getLocation(), Instant.now(), info);
     }
 }

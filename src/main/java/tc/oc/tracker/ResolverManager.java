@@ -85,14 +85,14 @@ public interface ResolverManager {
      * resolvers.
      *
      * If no resolver can resolve the specified event, this method will return
-     * a generic {@link EventDamage} instance.
+     * a generic {@link BukkitDamageInfo} instance.
      *
      * @param entity Entity that is being damaged
      * @param lifetime Lifetime of the entity up to this point
      * @param damageEvent Bukkit damage event to resolve
-     * @return Resolved damage (will never be null)
+     * @return Resolved damage information (never null)
      *
      * @throws NullPointerException if entity, lifetime, or the event is null
      */
-    @Nonnull Damage resolve(@Nonnull Entity entity, @Nonnull Lifetime lifetime, @Nonnull EntityDamageEvent damageEvent);
+    @Nonnull DamageInfo resolve(@Nonnull Entity entity, @Nonnull Lifetime lifetime, @Nonnull EntityDamageEvent damageEvent);
 }

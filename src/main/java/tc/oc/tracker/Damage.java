@@ -1,10 +1,8 @@
 package tc.oc.tracker;
 
 import javax.annotation.Nonnull;
-import javax.annotation.Nullable;
 
 import org.bukkit.Location;
-import org.bukkit.entity.LivingEntity;
 import org.joda.time.Instant;
 
 /**
@@ -41,11 +39,9 @@ public interface Damage {
     @Nonnull Instant getTime();
 
     /**
-     * Gets the resolved living damager if there is one.
+     * Gets additional information regarding this damage.
      *
-     * Contract specifies nothing about this field.
-     *
-     * @return Resolved damager or null if there is not one
+     * @return {@link DamageInfo} subclass describing the damage in more detail
      */
-    @Nullable LivingEntity getResolvedDamager();
+    @Nonnull DamageInfo getInfo();
 }

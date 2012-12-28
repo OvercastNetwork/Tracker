@@ -10,10 +10,11 @@ import javax.annotation.Nonnull;
 import org.bukkit.entity.Entity;
 import org.bukkit.event.entity.EntityDamageEvent;
 
-import tc.oc.tracker.Damage;
+import tc.oc.tracker.DamageInfo;
 import tc.oc.tracker.DamageResolver;
 import tc.oc.tracker.Lifetime;
 import tc.oc.tracker.ResolverManager;
+import tc.oc.tracker.damage.BukkitDamageInfo;
 
 import com.google.common.base.Preconditions;
 import com.google.common.collect.ImmutableSet;
@@ -107,21 +108,21 @@ public class SimpleResolverManager implements ResolverManager {
         return resolvers.build();
     }
 
-    public @Nonnull Damage resolve(@Nonnull Entity entity, @Nonnull Lifetime lifetime, @Nonnull EntityDamageEvent damageEvent) {
-        Damage damage = null;
+    public @Nonnull DamageInfo resolve(@Nonnull Entity entity, @Nonnull Lifetime lifetime, @Nonnull EntityDamageEvent damageEvent) {
+        DamageInfo info = null;
 
         for(ResolverEntry entry : this.resolvers) {
-            Damage resolvedDamage = entry.resolver.resolve(entity, lifetime, damageEvent);
-            if(resolvedDamage != null) {
-                damage = resolvedDamage;
+            DamageInfo resolvedInfo = entry.resolver.resolve(entity, lifetime, damageEvent);
+            if(resolvedInfo != null) {
+                info = resolvedInfo;
             }
         }
 
-        if(damage == null) {
-            damage = new BaseDamage.Builder().base(damageEvent).build();
+        if(info == null) {
+            info = new BukkitDamageInfo(damageEvent.getCause());
         }
 
-        return damage;
+        return info;
     }
 
     private final @Nonnull List<ResolverEntry> resolvers = Lists.newArrayList();

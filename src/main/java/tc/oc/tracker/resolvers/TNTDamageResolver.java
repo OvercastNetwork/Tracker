@@ -9,10 +9,10 @@ import org.bukkit.entity.TNTPrimed;
 import org.bukkit.event.entity.EntityDamageByEntityEvent;
 import org.bukkit.event.entity.EntityDamageEvent;
 
-import tc.oc.tracker.Damage;
+import tc.oc.tracker.DamageInfo;
 import tc.oc.tracker.DamageResolver;
 import tc.oc.tracker.Lifetime;
-import tc.oc.tracker.damage.TNTDamage;
+import tc.oc.tracker.damage.TNTDamageInfo;
 import tc.oc.tracker.trackers.ExplosiveTracker;
 
 public class TNTDamageResolver implements DamageResolver {
@@ -22,16 +22,15 @@ public class TNTDamageResolver implements DamageResolver {
         this.tracker = tracker;
     }
 
-    public @Nullable Damage resolve(@Nonnull Entity entity, @Nonnull Lifetime lifetime, @Nonnull EntityDamageEvent damageEvent) {
+    public @Nullable DamageInfo resolve(@Nonnull Entity entity, @Nonnull Lifetime lifetime, @Nonnull EntityDamageEvent damageEvent) {
         if(damageEvent instanceof EntityDamageByEntityEvent) {
             EntityDamageByEntityEvent event = (EntityDamageByEntityEvent) damageEvent;
 
             if(event.getDamager() instanceof TNTPrimed) {
                 TNTPrimed tnt = (TNTPrimed) event.getDamager();
-
                 Player owner = this.tracker.getOwner(tnt);
 
-                return new TNTDamage.Builder().base(damageEvent).resolvedDamager(owner).tnt(tnt).build();
+                return new TNTDamageInfo(tnt, owner);
             }
         }
 
