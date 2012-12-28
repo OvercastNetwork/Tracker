@@ -13,7 +13,7 @@ import org.bukkit.event.entity.EntityDamageEvent;
 import tc.oc.tracker.DamageInfo;
 import tc.oc.tracker.DamageResolver;
 import tc.oc.tracker.Lifetime;
-import tc.oc.tracker.ResolverManager;
+import tc.oc.tracker.DamageResolverManager;
 import tc.oc.tracker.damage.BukkitDamageInfo;
 
 import com.google.common.base.Preconditions;
@@ -21,7 +21,7 @@ import com.google.common.collect.ImmutableSet;
 import com.google.common.collect.Lists;
 import com.google.common.collect.Sets;
 
-public class SimpleResolverManager implements ResolverManager {
+public class SimpleResolverManager implements DamageResolverManager {
     public boolean isRegistered(@Nonnull DamageResolver resolver) {
         Preconditions.checkNotNull(resolver, "resolver");
 

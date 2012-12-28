@@ -18,7 +18,7 @@ import org.bukkit.event.entity.EntityDamageEvent;
  * resolvers that should be called first. Note that there is no guarantee of
  * the order outside of what is specified.
  */
-public interface ResolverManager {
+public interface DamageResolverManager {
     /**
      * Indicates whether the specified resolver is already registered.
      *

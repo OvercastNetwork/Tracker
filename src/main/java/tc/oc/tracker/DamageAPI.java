@@ -13,7 +13,7 @@ import org.bukkit.event.entity.EntityDamageEvent.DamageCause;
 import org.joda.time.Instant;
 
 import tc.oc.tracker.base.SimpleDamage;
-import tc.oc.tracker.resolvers.DamageAPIResolver;
+import tc.oc.tracker.damage.resolvers.DamageAPIResolver;
 
 import com.google.common.base.Preconditions;
 

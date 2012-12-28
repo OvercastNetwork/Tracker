@@ -1,4 +1,4 @@
-package tc.oc.tracker.resolvers;
+package tc.oc.tracker.damage.resolvers;
 
 import javax.annotation.Nonnull;
 import javax.annotation.Nullable;
