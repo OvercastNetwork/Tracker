@@ -22,4 +22,8 @@ public class DamageAPIResolver implements DamageResolver {
     public @Nullable DamageInfo resolve(@Nonnull Entity entity, @Nonnull Lifetime lifetime, @Nonnull EntityDamageEvent damageEvent) {
         return DamageAPI.getAPIDamage(damageEvent);
     }
+
+    static {
+        DamageResolvers.getManager().register(new DamageAPIResolver());
+    }
 }

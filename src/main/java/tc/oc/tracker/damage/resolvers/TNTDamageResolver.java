@@ -36,5 +36,4 @@ public class TNTDamageResolver implements DamageResolver {
 
         return null;
     }
-
 }
