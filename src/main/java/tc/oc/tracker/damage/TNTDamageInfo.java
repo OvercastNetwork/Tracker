@@ -19,9 +19,14 @@ public class TNTDamageInfo extends AbstractDamageInfo {
         this.tnt = tnt;
     }
 
-    public TNTPrimed getTNT() {
+    public @Nonnull TNTPrimed getTNT() {
         return this.tnt;
     }
 
-    private final TNTPrimed tnt;
+    private final @Nonnull TNTPrimed tnt;
+
+    @Override
+    public @Nonnull String toString() {
+        return "TNTDamageInfo{tnt=" + this.tnt + ",damager=" + this.resolvedDamager + "}";
+    }
 }
