@@ -81,14 +81,14 @@ public class EntityDamageEventListener implements Listener {
 
             // update mutable information
             our.setCancelled(bukkit.isCancelled());
-            our.setHearts(bukkit.getDamage());
+            our.setDamage(bukkit.getDamage());
 
             // call
             EventUtil.callEvent(our, EntityDamageEvent.getHandlerList(), this.priority);
 
             // update bukkit event
             bukkit.setCancelled(our.isCancelled());
-            bukkit.setDamage(our.getHearts());
+            bukkit.setDamage(our.getDamage());
         }
 
         private final @Nonnull EntityDamageEventListener parent;

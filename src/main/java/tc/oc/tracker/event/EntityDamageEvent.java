@@ -19,36 +19,36 @@ import com.google.common.base.Preconditions;
  */
 public class EntityDamageEvent extends EntityEvent implements Cancellable {
     private final @Nonnull Lifetime lifetime;
-    private int hearts;
+    private int damage;
     private final @Nonnull Location location;
     private final @Nonnull Instant time;
     private final @Nonnull DamageInfo info;
     private boolean cancelled = false;
 
-    public EntityDamageEvent(@Nonnull Entity entity, @Nonnull Lifetime lifetime, int hearts, @Nonnull Location location, @Nonnull Instant time, @Nonnull DamageInfo info) {
+    public EntityDamageEvent(@Nonnull Entity entity, @Nonnull Lifetime lifetime, int damage, @Nonnull Location location, @Nonnull Instant time, @Nonnull DamageInfo info) {
         super(entity);
 
         Preconditions.checkNotNull(lifetime, "lifetime");
-        Preconditions.checkArgument(hearts >= 0, "hearts must be greater than or equal to zero");
+        Preconditions.checkArgument(damage >= 0, "damage must be greater than or equal to zero");
         Preconditions.checkNotNull(location, "location");
         Preconditions.checkNotNull(time, "time");
         Preconditions.checkNotNull(info, "damage info");
 
         this.lifetime = lifetime;
-        this.hearts = hearts;
+        this.damage = damage;
         this.location = location.clone();
         this.time = time;
         this.info = info;
     }
 
-    public int getHearts() {
-        return this.hearts;
+    public int getDamage() {
+        return this.damage;
     }
 
-    public void setHearts(int hearts) {
-        Preconditions.checkArgument(hearts >= 0, "hearts must be greater than or equal to zero");
+    public void setDamage(int damage) {
+        Preconditions.checkArgument(damage >= 0, "damage must be greater than or equal to zero");
 
-        this.hearts = hearts;
+        this.damage = damage;
     }
 
     public @Nonnull Location getLocation() {

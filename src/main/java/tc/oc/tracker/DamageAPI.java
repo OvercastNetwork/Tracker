@@ -36,7 +36,7 @@ public final class DamageAPI {
      * This method will call the appropriate damage method and fire an {@link EntityDamageEvent}.
      *
      * @param entity Entity to inflict damage upon
-     * @param hearts Amount of half-hearts of damage to inflict
+     * @param damage Amount of half-hearts of damage to inflict
      * @param info {@link DamageInfo} object that details the type of damage
      * @param force Indicates whether this method should respect cancellations
      * @return the final {@link Damage} object or null if the damage was cancelled
@@ -44,12 +44,12 @@ public final class DamageAPI {
      * @throws NullPointerException if entity or info is null
      * @throws IllegalArgumentExcpetion if hearts is less than zero
      */
-    public static @Nullable Damage inflictDamage(@Nonnull LivingEntity entity, int hearts, @Nonnull DamageInfo info, boolean force) {
+    public static @Nullable Damage inflictDamage(@Nonnull LivingEntity entity, int damage, @Nonnull DamageInfo info, boolean force) {
         Preconditions.checkNotNull(entity, "living entity");
-        Preconditions.checkArgument(hearts >= 0, "hearts must be greater than or equal to zero");
+        Preconditions.checkArgument(damage >= 0, "damage must be greater than or equal to zero");
         Preconditions.checkNotNull(info, "damage info");
 
-        EntityDamageEvent event = new EntityDamageEvent(entity, DamageCause.CUSTOM, hearts);
+        EntityDamageEvent event = new EntityDamageEvent(entity, DamageCause.CUSTOM, damage);
         setAPIDamage(event, info);
 
         Bukkit.getPluginManager().callEvent(event);

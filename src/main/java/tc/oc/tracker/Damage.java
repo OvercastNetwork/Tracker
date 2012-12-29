@@ -12,13 +12,16 @@ import org.joda.time.Instant;
  */
 public interface Damage {
     /**
-     * Gets the amount of hearts of damage that were inflicted.
+     * Gets the amount of damage that was inflicted.
+     *
+     * Note that this is the raw damage in half-hearts before dampeners (armor,
+     * potion effects) are applied.
      *
      * Contract specifies that the result is 0 or greater.
      *
-     * @return Hearts of damage inflicted
+     * @return Amount of damage inflicted
      */
-    int getHearts();
+    int getDamage();
 
     /**
      * Gets the location where the damage occurred.

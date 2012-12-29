@@ -11,20 +11,20 @@ import tc.oc.tracker.DamageInfo;
 import com.google.common.base.Preconditions;
 
 public class SimpleDamage implements Damage {
-    public SimpleDamage(int hearts, @Nonnull Location location, @Nonnull Instant time, @Nonnull DamageInfo info) {
-        Preconditions.checkArgument(hearts >= 0, "hearts must be greater than or equal to zero");
+    public SimpleDamage(int damage, @Nonnull Location location, @Nonnull Instant time, @Nonnull DamageInfo info) {
+        Preconditions.checkArgument(damage >= 0, "damage must be greater than or equal to zero");
         Preconditions.checkNotNull(location, "location");
         Preconditions.checkNotNull(time, "time");
         Preconditions.checkNotNull(info, "info");
 
-        this.hearts = hearts;
+        this.damage = damage;
         this.location = location;
         this.time = time;
         this.info = info;
     }
 
-    public int getHearts() {
-        return this.hearts;
+    public int getDamage() {
+        return this.damage;
     }
 
     public @Nonnull Location getLocation() {
@@ -39,7 +39,7 @@ public class SimpleDamage implements Damage {
         return this.info;
     }
 
-    private final int hearts;
+    private final int damage;
     private final @Nonnull Location location;
     private final @Nonnull Instant time;
     private final @Nonnull DamageInfo info;
