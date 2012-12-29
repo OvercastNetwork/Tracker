@@ -18,11 +18,17 @@ public class TrackerPlugin extends JavaPlugin {
         // basic operation listeners
         this.registerEvents(new WorldListener(Trackers.getManager()));
 
+        EntityDamageEventListener damageEventListener = new EntityDamageEventListener();
+        damageEventListener.register(this);
+
         // tracker setup
         ExplosiveTracker explosiveTracker = new SimpleExplosiveTracker();
 
         this.registerEvents(new ExplosiveListener(explosiveTracker));
         Trackers.getManager().setRealTracker(ExplosiveTracker.class, explosiveTracker);
+
+        // debug
+        this.registerEvents(new DebugListener());
     }
 
     private void registerEvents(Listener listener) {
