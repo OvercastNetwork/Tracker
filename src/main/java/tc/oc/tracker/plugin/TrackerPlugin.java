@@ -21,6 +21,7 @@ public class TrackerPlugin extends JavaPlugin {
     @Override
     public void onEnable() {
         // basic operation listeners
+        this.registerEvents(new LifetimeListener());
         this.registerEvents(new WorldListener(Trackers.getManager()));
 
         EntityDamageEventListener damageEventListener = new EntityDamageEventListener();
