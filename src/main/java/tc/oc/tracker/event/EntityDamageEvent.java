@@ -9,8 +9,10 @@ import org.bukkit.event.HandlerList;
 import org.bukkit.event.entity.EntityEvent;
 import org.joda.time.Instant;
 
+import tc.oc.tracker.Damage;
 import tc.oc.tracker.DamageInfo;
 import tc.oc.tracker.Lifetime;
+import tc.oc.tracker.base.SimpleDamage;
 
 import com.google.common.base.Preconditions;
 
@@ -65,6 +67,10 @@ public class EntityDamageEvent extends EntityEvent implements Cancellable {
 
     public @Nonnull DamageInfo getInfo() {
         return this.info;
+    }
+
+    public @Nonnull Damage toDamageObject() {
+        return new SimpleDamage(this.damage, this.location, this.time, this.info);
     }
 
     public boolean isCancelled() {

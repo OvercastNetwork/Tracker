@@ -7,6 +7,7 @@ import org.bukkit.entity.Entity;
 import org.bukkit.event.entity.EntityDamageEvent;
 
 import tc.oc.tracker.*;
+import tc.oc.tracker.plugin.DamageAPIHelper;
 
 /**
  * Resolves the damage stored in the {@link DamageAPI}.
@@ -20,7 +21,7 @@ import tc.oc.tracker.*;
 public class DamageAPIResolver implements DamageResolver {
     /** @see DamageResolvers#resolve */
     public @Nullable DamageInfo resolve(@Nonnull Entity entity, @Nonnull Lifetime lifetime, @Nonnull EntityDamageEvent damageEvent) {
-        return DamageAPI.getAPIDamage(damageEvent);
+        return DamageAPIHelper.get().getEventDamageInfo(damageEvent);
     }
 
     static {

@@ -1,8 +1,5 @@
 package tc.oc.tracker.plugin;
 
-import java.util.Map;
-import java.util.WeakHashMap;
-
 import javax.annotation.Nonnull;
 
 import org.bukkit.Location;
@@ -37,28 +34,6 @@ public class EntityDamageEventListener implements Listener {
         HandlerList.unregisterAll(this);
     }
 
-    public @Nonnull EntityDamageEvent getOurEvent(@Nonnull org.bukkit.event.entity.EntityDamageEvent bukkit) {
-        Preconditions.checkNotNull(bukkit, "entity damage event");
-        Preconditions.checkArgument(bukkit.getEntity() instanceof LivingEntity, "damage event must have living entity");
-
-        EntityDamageEvent event = this.events.get(bukkit);
-        if(event == null) {
-            LivingEntity entity = (LivingEntity) bukkit.getEntity();
-            Lifetime lifetime = Lifetimes.getLifetime(entity);
-            int hearts = bukkit.getDamage();
-            Location location = entity.getLocation();
-            Instant time = Instant.now();
-            DamageInfo info = DamageResolvers.getManager().resolve(entity, lifetime, bukkit);
-
-            event = new EntityDamageEvent(entity, lifetime, hearts, location, time, info);
-            this.events.put(bukkit, event);
-        }
-
-        return event;
-    }
-
-    private final Map<org.bukkit.event.entity.EntityDamageEvent, EntityDamageEvent> events = new WeakHashMap<org.bukkit.event.entity.EntityDamageEvent, EntityDamageEvent>();
-
     public static class EntityDamageEventRunner implements EventExecutor {
         public EntityDamageEventRunner(@Nonnull EntityDamageEventListener parent, @Nonnull EventPriority priority) {
             Preconditions.checkNotNull(parent, "parent");
@@ -75,9 +50,24 @@ public class EntityDamageEventListener implements Listener {
             org.bukkit.event.entity.EntityDamageEvent bukkit = (org.bukkit.event.entity.EntityDamageEvent) event;
 
             if(!(bukkit.getEntity() instanceof LivingEntity)) return;
+            LivingEntity entity = (LivingEntity) bukkit.getEntity();
+
+            DamageAPIHelper helper = DamageAPIHelper.get();
+            Lifetime lifetime = Lifetimes.getLifetime(entity);
 
             // get our version of the event
-            EntityDamageEvent our = this.parent.getOurEvent(bukkit);
+            EntityDamageEvent our;
+            if(this.priority == EventPriority.LOWEST) {
+                int hearts = bukkit.getDamage();
+                Location location = entity.getLocation();
+                Instant time = Instant.now();
+                DamageInfo info = DamageResolvers.getManager().resolve(entity, lifetime, bukkit);
+
+                our = new EntityDamageEvent(entity, lifetime, hearts, location, time, info);
+                helper.setOurEvent(bukkit, our);
+            } else {
+                our = DamageAPIHelper.get().getOurEvent(bukkit);
+            }
 
             // update mutable information
             our.setCancelled(bukkit.isCancelled());
@@ -89,6 +79,12 @@ public class EntityDamageEventListener implements Listener {
             // update bukkit event
             bukkit.setCancelled(our.isCancelled());
             bukkit.setDamage(our.getDamage());
+
+            // clean up
+            if(this.priority == EventPriority.MONITOR) {
+                DamageAPIHelper.get().setOurEvent(bukkit, null);
+                lifetime.addDamage(our.toDamageObject());
+            }
         }
 
         private final @Nonnull EntityDamageEventListener parent;
