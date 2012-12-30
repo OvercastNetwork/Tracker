@@ -1,6 +1,7 @@
 package tc.oc.tracker.base;
 
 import java.util.Map;
+import java.util.WeakHashMap;
 
 import javax.annotation.Nonnull;
 
@@ -10,7 +11,6 @@ import tc.oc.tracker.Lifetime;
 import tc.oc.tracker.LifetimeManager;
 
 import com.google.common.base.Preconditions;
-import com.google.common.collect.Maps;
 
 public class SimpleLifetimeManager implements LifetimeManager {
     public @Nonnull Lifetime getLifetime(@Nonnull LivingEntity entity) {
@@ -57,5 +57,5 @@ public class SimpleLifetimeManager implements LifetimeManager {
         }
     }
 
-    private final Map<LivingEntity, Lifetime> lifetimes = Maps.newHashMap();
+    private final Map<LivingEntity, Lifetime> lifetimes = new WeakHashMap<LivingEntity, Lifetime>();
 }
