@@ -10,6 +10,7 @@ import javax.annotation.Nullable;
 import org.joda.time.Instant;
 
 import tc.oc.tracker.Damage;
+import tc.oc.tracker.DamageInfo;
 import tc.oc.tracker.Lifetime;
 
 import com.google.common.base.Preconditions;
@@ -66,6 +67,19 @@ public class SimpleLifetime implements Lifetime {
         } else {
             return null;
         }
+    }
+
+    public @Nullable Damage getLastDamage(@Nonnull Class<? extends DamageInfo> damageInfoClass) {
+        Preconditions.checkNotNull(damageInfoClass, "damage info class");
+
+        for(ListIterator<Damage> it = this.damage.listIterator(this.damage.size() - 1); it.hasPrevious(); ) {
+            Damage damage = it.previous();
+            if(damageInfoClass.isInstance(damage.getInfo())) {
+                return damage;
+            }
+        }
+
+        return null;
     }
 
     public void addDamage(@Nonnull Damage damage) {
