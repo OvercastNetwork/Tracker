@@ -22,49 +22,17 @@ public class SimpleTrackerManager implements TrackerManager {
         return this.getTracker(trackerClass) != null;
     }
 
-    public boolean hasRealTracker(@Nonnull Class<? extends Tracker> trackerClass) {
-        return this.getRealTracker(trackerClass) != null;
-    }
-
-    public boolean hasFakeTracker(@Nonnull Class<? extends Tracker> trackerClass) {
-        return this.getFakeTracker(trackerClass) != null;
-    }
-
     public @Nullable <T extends Tracker> T getTracker(@Nonnull Class<T> trackerClass) {
-        Preconditions.checkNotNull(trackerClass, "tracker class");
-
-        T tracker = this.getRealTracker(trackerClass);
-        if(tracker != null) {
-            return tracker;
-        } else {
-            return this.getFakeTracker(trackerClass);
-        }
-    }
-
-    public @Nullable <T extends Tracker> T getRealTracker(@Nonnull Class<T> trackerClass) {
         Preconditions.checkNotNull(trackerClass, "tracker class");
 
         return findTracker(this.trackers, trackerClass);
     }
 
-    public @Nullable <T extends Tracker> T getFakeTracker(@Nonnull Class<T> trackerClass) {
-        Preconditions.checkNotNull(trackerClass, "tracker class");
-
-        return findTracker(this.fakeTrackers, trackerClass);
-    }
-
-    public @Nullable <T extends Tracker> T setRealTracker(@Nonnull Class<T> trackerClass, @Nullable T tracker) {
+    public @Nullable <T extends Tracker> T setTracker(@Nonnull Class<T> trackerClass, @Nullable T tracker) {
         Preconditions.checkNotNull(trackerClass, "tracker class");
         Preconditions.checkArgument(trackerClass.isInstance(tracker), "tracker is not an instance of the specified class");
 
         return setTrackerInDB(this.trackers, trackerClass, tracker);
-    }
-
-    public @Nullable <T extends Tracker> T setFakeTracker(@Nonnull Class<T> trackerClass, @Nullable T fakeTracker) {
-        Preconditions.checkNotNull(trackerClass, "tracker class");
-        Preconditions.checkArgument(trackerClass.isInstance(fakeTracker), "fake tracker is not an instance of the specified class");
-
-        return setTrackerInDB(this.fakeTrackers, trackerClass, fakeTracker);
     }
 
     @SuppressWarnings("unchecked")
@@ -106,6 +74,5 @@ public class SimpleTrackerManager implements TrackerManager {
         }
     }
 
-    private final Map<Class<? extends Tracker>, Tracker> fakeTrackers = Maps.newHashMap();
     private final Map<Class<? extends Tracker>, Tracker> trackers = Maps.newHashMap();
 }

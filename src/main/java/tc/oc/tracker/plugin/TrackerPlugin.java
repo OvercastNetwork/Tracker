@@ -33,7 +33,7 @@ public class TrackerPlugin extends JavaPlugin {
         ExplosiveTracker explosiveTracker = new SimpleExplosiveTracker();
 
         this.registerEvents(new ExplosiveListener(explosiveTracker));
-        tm.setRealTracker(ExplosiveTracker.class, explosiveTracker);
+        tm.setTracker(ExplosiveTracker.class, explosiveTracker);
 
         // register damage resolvers
         DamageResolverManager drm = DamageResolvers.getManager();
