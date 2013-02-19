@@ -10,10 +10,7 @@ import org.bukkit.plugin.Plugin;
 import org.bukkit.plugin.PluginManager;
 import org.joda.time.Instant;
 
-import tc.oc.tracker.DamageInfo;
-import tc.oc.tracker.DamageResolvers;
-import tc.oc.tracker.Lifetime;
-import tc.oc.tracker.Lifetimes;
+import tc.oc.tracker.*;
 import tc.oc.tracker.event.EntityDamageEvent;
 import tc.oc.tracker.util.EventUtil;
 
@@ -52,6 +49,8 @@ public class EntityDamageEventListener implements Listener {
             if(!(bukkit.getEntity() instanceof LivingEntity)) return;
             LivingEntity entity = (LivingEntity) bukkit.getEntity();
 
+            if(entity.isDead()) return;
+            
             DamageAPIHelper helper = DamageAPIHelper.get();
             Lifetime lifetime = Lifetimes.getLifetime(entity);
 
