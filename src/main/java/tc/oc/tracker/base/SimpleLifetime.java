@@ -50,7 +50,7 @@ public class SimpleLifetime implements Lifetime {
     }
 
     public @Nonnull ListIterator<Damage> getDamageLast() {
-        return Collections.unmodifiableList(this.damage).listIterator(this.damage.size() - 1);
+        return Collections.unmodifiableList(this.damage).listIterator(this.damage.size());
     }
 
     public @Nullable Damage getFirstDamage() {
@@ -72,7 +72,7 @@ public class SimpleLifetime implements Lifetime {
     public @Nullable Damage getLastDamage(@Nonnull Class<? extends DamageInfo> damageInfoClass) {
         Preconditions.checkNotNull(damageInfoClass, "damage info class");
 
-        for(ListIterator<Damage> it = this.damage.listIterator(this.damage.size() - 1); it.hasPrevious(); ) {
+        for(ListIterator<Damage> it = this.getDamageLast(); it.hasPrevious(); ) {
             Damage damage = it.previous();
             if(damageInfoClass.isInstance(damage.getInfo())) {
                 return damage;
