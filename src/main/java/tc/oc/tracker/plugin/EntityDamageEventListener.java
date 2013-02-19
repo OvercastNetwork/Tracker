@@ -56,8 +56,8 @@ public class EntityDamageEventListener implements Listener {
             Lifetime lifetime = Lifetimes.getLifetime(entity);
 
             // get our version of the event
-            EntityDamageEvent our;
-            if(this.priority == EventPriority.LOWEST) {
+            EntityDamageEvent our = DamageAPIHelper.get().getOurEvent(bukkit);
+            if(our == null) {
                 int hearts = bukkit.getDamage();
                 Location location = entity.getLocation();
                 Instant time = Instant.now();
@@ -65,8 +65,6 @@ public class EntityDamageEventListener implements Listener {
 
                 our = new EntityDamageEvent(entity, lifetime, hearts, location, time, info);
                 helper.setOurEvent(bukkit, our);
-            } else {
-                our = DamageAPIHelper.get().getOurEvent(bukkit);
             }
 
             // update mutable information
