@@ -31,6 +31,7 @@ public class TrackerPlugin extends JavaPlugin {
         TrackerManager tm = Trackers.getManager();
 
         ExplosiveTracker explosiveTracker = new SimpleExplosiveTracker();
+        explosiveTracker.enable();
 
         this.registerEvents(new ExplosiveListener(explosiveTracker));
         tm.setTracker(ExplosiveTracker.class, explosiveTracker);
