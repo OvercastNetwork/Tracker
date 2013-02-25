@@ -18,9 +18,9 @@
     </repositories>
     <dependencies>
         <dependency>
-            <groupId>org.bukkit</groupId>
-            <artifactId>bukkit</artifactId>
-            <version>1.4.5-R1.0</version>
+            <groupId>tc.oc</groupId>
+            <artifactId>sportbukkit-api</artifactId>
+            <version>1.4.7-R1.0</version>
         </dependency>
         <dependency>
             <groupId>com.google.guava</groupId>
