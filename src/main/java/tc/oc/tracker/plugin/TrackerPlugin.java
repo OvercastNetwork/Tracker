@@ -41,6 +41,7 @@ public class TrackerPlugin extends JavaPlugin {
         drm.register(new BlockDamageResolver());
         drm.register(new FallDamageResolver());
         drm.register(new LavaDamageResolver());
+        drm.register(new MeleeDamageResolver());
         drm.register(new ProjectileDamageResolver());
         drm.register(new TNTDamageResolver(explosiveTracker));
         drm.register(new VoidDamageResolver());
