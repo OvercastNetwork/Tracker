@@ -7,10 +7,7 @@ import tc.oc.tracker.DamageResolverManager;
 import tc.oc.tracker.DamageResolvers;
 import tc.oc.tracker.TrackerManager;
 import tc.oc.tracker.Trackers;
-import tc.oc.tracker.damage.resolvers.BlockDamageResolver;
-import tc.oc.tracker.damage.resolvers.FallDamageResolver;
-import tc.oc.tracker.damage.resolvers.ProjectileDamageResolver;
-import tc.oc.tracker.damage.resolvers.TNTDamageResolver;
+import tc.oc.tracker.damage.resolvers.*;
 import tc.oc.tracker.trackers.ExplosiveTracker;
 import tc.oc.tracker.trackers.base.SimpleExplosiveTracker;
 
@@ -43,6 +40,7 @@ public class TrackerPlugin extends JavaPlugin {
 
         drm.register(new BlockDamageResolver());
         drm.register(new FallDamageResolver());
+        drm.register(new LavaDamageResolver());
         drm.register(new ProjectileDamageResolver());
         drm.register(new TNTDamageResolver(explosiveTracker));
 
