@@ -3,7 +3,7 @@ package tc.oc.tracker.damage.resolvers;
 import javax.annotation.Nonnull;
 import javax.annotation.Nullable;
 
-import org.bukkit.entity.Entity;
+import org.bukkit.entity.LivingEntity;
 import org.bukkit.event.entity.EntityDamageEvent;
 
 import tc.oc.tracker.*;
@@ -20,7 +20,7 @@ import tc.oc.tracker.plugin.DamageAPIHelper;
  */
 public class DamageAPIResolver implements DamageResolver {
     /** @see DamageResolvers#resolve */
-    public @Nullable DamageInfo resolve(@Nonnull Entity entity, @Nonnull Lifetime lifetime, @Nonnull EntityDamageEvent damageEvent) {
+    public @Nullable DamageInfo resolve(@Nonnull LivingEntity entity, @Nonnull Lifetime lifetime, @Nonnull EntityDamageEvent damageEvent) {
         return DamageAPIHelper.get().getEventDamageInfo(damageEvent);
     }
 

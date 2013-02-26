@@ -7,13 +7,13 @@ import java.util.Set;
 
 import javax.annotation.Nonnull;
 
-import org.bukkit.entity.Entity;
+import org.bukkit.entity.LivingEntity;
 import org.bukkit.event.entity.EntityDamageEvent;
 
 import tc.oc.tracker.DamageInfo;
 import tc.oc.tracker.DamageResolver;
-import tc.oc.tracker.Lifetime;
 import tc.oc.tracker.DamageResolverManager;
+import tc.oc.tracker.Lifetime;
 import tc.oc.tracker.damage.BukkitDamageInfo;
 
 import com.google.common.base.Preconditions;
@@ -108,7 +108,7 @@ public class SimpleResolverManager implements DamageResolverManager {
         return resolvers.build();
     }
 
-    public @Nonnull DamageInfo resolve(@Nonnull Entity entity, @Nonnull Lifetime lifetime, @Nonnull EntityDamageEvent damageEvent) {
+    public @Nonnull DamageInfo resolve(@Nonnull LivingEntity entity, @Nonnull Lifetime lifetime, @Nonnull EntityDamageEvent damageEvent) {
         DamageInfo info = null;
 
         for(ResolverEntry entry : this.resolvers) {

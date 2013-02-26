@@ -5,8 +5,10 @@ import java.util.Set;
 
 import javax.annotation.Nonnull;
 
-import org.bukkit.entity.Entity;
+import org.bukkit.entity.LivingEntity;
 import org.bukkit.event.entity.EntityDamageEvent;
+
+import tc.oc.tracker.damage.BukkitDamageInfo;
 
 /**
  * Manages the available {@link DamageResolver}s and provides a convenience
@@ -94,5 +96,5 @@ public interface DamageResolverManager {
      *
      * @throws NullPointerException if entity, lifetime, or the event is null
      */
-    @Nonnull DamageInfo resolve(@Nonnull Entity entity, @Nonnull Lifetime lifetime, @Nonnull EntityDamageEvent damageEvent);
+    @Nonnull DamageInfo resolve(@Nonnull LivingEntity entity, @Nonnull Lifetime lifetime, @Nonnull EntityDamageEvent damageEvent);
 }
