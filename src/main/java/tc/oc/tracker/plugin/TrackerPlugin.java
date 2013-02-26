@@ -1,5 +1,7 @@
 package tc.oc.tracker.plugin;
 
+import javax.annotation.Nullable;
+
 import org.bukkit.event.Listener;
 import org.bukkit.plugin.java.JavaPlugin;
 
@@ -8,10 +10,13 @@ import tc.oc.tracker.DamageResolvers;
 import tc.oc.tracker.TrackerManager;
 import tc.oc.tracker.Trackers;
 import tc.oc.tracker.damage.resolvers.*;
+import tc.oc.tracker.timer.TickTimer;
 import tc.oc.tracker.trackers.ExplosiveTracker;
 import tc.oc.tracker.trackers.base.SimpleExplosiveTracker;
 
 public class TrackerPlugin extends JavaPlugin {
+    public @Nullable TickTimer tickTimer;
+
     @Override
     public void onDisable() {
         Trackers.getManager().clearTracker(ExplosiveTracker.class, SimpleExplosiveTracker.class);
@@ -25,6 +30,10 @@ public class TrackerPlugin extends JavaPlugin {
 
         EntityDamageEventListener damageEventListener = new EntityDamageEventListener();
         damageEventListener.register(this);
+
+        // initialize timer
+        this.tickTimer = new TickTimer(this);
+        this.tickTimer.start();
 
         // tracker setup
         TrackerManager tm = Trackers.getManager();
