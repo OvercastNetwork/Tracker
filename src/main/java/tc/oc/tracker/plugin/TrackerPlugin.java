@@ -13,6 +13,7 @@ import tc.oc.tracker.damage.resolvers.*;
 import tc.oc.tracker.timer.TickTimer;
 import tc.oc.tracker.trackers.ExplosiveTracker;
 import tc.oc.tracker.trackers.base.SimpleExplosiveTracker;
+import tc.oc.tracker.trackers.base.gravity.SimpleGravityKillTracker;
 
 public class TrackerPlugin extends JavaPlugin {
     public @Nullable TickTimer tickTimer;
@@ -39,10 +40,16 @@ public class TrackerPlugin extends JavaPlugin {
         TrackerManager tm = Trackers.getManager();
 
         ExplosiveTracker explosiveTracker = new SimpleExplosiveTracker();
+        SimpleGravityKillTracker gravityKillTracker = new SimpleGravityKillTracker(this, this.tickTimer);
+
         explosiveTracker.enable();
+        gravityKillTracker.enable();
 
         this.registerEvents(new ExplosiveListener(explosiveTracker));
+        this.registerEvents(new GravityListener(this, gravityKillTracker, this.tickTimer));
+
         tm.setTracker(ExplosiveTracker.class, explosiveTracker);
+        tm.setTracker(SimpleGravityKillTracker.class, gravityKillTracker);
 
         // register damage resolvers
         DamageResolverManager drm = DamageResolvers.getManager();
@@ -54,9 +61,10 @@ public class TrackerPlugin extends JavaPlugin {
         drm.register(new ProjectileDamageResolver());
         drm.register(new TNTDamageResolver(explosiveTracker));
         drm.register(new VoidDamageResolver());
+        drm.register(new GravityDamageResolver(gravityKillTracker, this.tickTimer));
 
         // debug
-        this.registerEvents(new DebugListener());
+        // this.registerEvents(new DebugListener());
     }
 
     private void registerEvents(Listener listener) {
