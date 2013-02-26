@@ -68,9 +68,9 @@ public class SimpleTrackerManager implements TrackerManager {
     @SuppressWarnings("unchecked")
     private static @Nullable <T extends Tracker> T setTrackerInDB(@Nonnull Map<Class<? extends Tracker>, Tracker> db, @Nonnull Class<T> trackerClass, @Nullable T tracker) {
         if(tracker != null) {
-            return (T) db.remove(trackerClass);
-        } else {
             return (T) db.put(trackerClass, tracker);
+        } else {
+            return (T) db.remove(trackerClass);
         }
     }
 
