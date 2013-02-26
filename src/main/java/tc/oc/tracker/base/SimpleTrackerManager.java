@@ -6,6 +6,8 @@ import java.util.Set;
 import javax.annotation.Nonnull;
 import javax.annotation.Nullable;
 
+import org.bukkit.World;
+
 import tc.oc.tracker.Tracker;
 import tc.oc.tracker.TrackerManager;
 
@@ -71,6 +73,14 @@ public class SimpleTrackerManager implements TrackerManager {
             return (T) db.put(trackerClass, tracker);
         } else {
             return (T) db.remove(trackerClass);
+        }
+    }
+
+    public void clearTrackers(@Nonnull World world) {
+        Preconditions.checkNotNull(world, "world");
+
+        for(Tracker tracker : this.getTrackers()) {
+            tracker.clear(world);
         }
     }
 
