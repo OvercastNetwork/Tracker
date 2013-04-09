@@ -11,9 +11,13 @@ import tc.oc.tracker.TrackerManager;
 import tc.oc.tracker.Trackers;
 import tc.oc.tracker.damage.resolvers.*;
 import tc.oc.tracker.timer.TickTimer;
+import tc.oc.tracker.trackers.DispenserTracker;
 import tc.oc.tracker.trackers.ExplosiveTracker;
+import tc.oc.tracker.trackers.ProjectileDistanceTracker;
+import tc.oc.tracker.trackers.base.SimpleDispenserTracker;
 import tc.oc.tracker.trackers.base.SimpleExplosiveTracker;
 import tc.oc.tracker.trackers.base.gravity.SimpleGravityKillTracker;
+import tc.oc.tracker.trackers.base.SimpleProjectileDistanceTracker;
 
 public class TrackerPlugin extends JavaPlugin {
     public @Nullable TickTimer tickTimer;
@@ -51,6 +55,18 @@ public class TrackerPlugin extends JavaPlugin {
         tm.setTracker(ExplosiveTracker.class, explosiveTracker);
         tm.setTracker(SimpleGravityKillTracker.class, gravityKillTracker);
 
+        DispenserTracker dispenserTracker = new SimpleDispenserTracker();
+        dispenserTracker.enable();
+
+        this.registerEvents(new DispenserListener(dispenserTracker));
+        tm.setTracker(DispenserTracker.class, dispenserTracker);
+
+        ProjectileDistanceTracker projectileDistanceTracker = new SimpleProjectileDistanceTracker();
+        projectileDistanceTracker.enable();
+
+        this.registerEvents(new ProjectileDistanceListener(projectileDistanceTracker));
+        tm.setTracker(ProjectileDistanceTracker.class, projectileDistanceTracker);
+
         // register damage resolvers
         DamageResolverManager drm = DamageResolvers.getManager();
 
@@ -58,10 +74,11 @@ public class TrackerPlugin extends JavaPlugin {
         drm.register(new FallDamageResolver());
         drm.register(new LavaDamageResolver());
         drm.register(new MeleeDamageResolver());
-        drm.register(new ProjectileDamageResolver());
-        drm.register(new TNTDamageResolver(explosiveTracker));
+        drm.register(new ProjectileDamageResolver(projectileDistanceTracker));
+        drm.register(new TNTDamageResolver(explosiveTracker, dispenserTracker));
         drm.register(new VoidDamageResolver());
         drm.register(new GravityDamageResolver(gravityKillTracker, this.tickTimer));
+        drm.register(new DispensedProjectileDamageResolver(projectileDistanceTracker, dispenserTracker));
 
         // debug
         // this.registerEvents(new DebugListener());

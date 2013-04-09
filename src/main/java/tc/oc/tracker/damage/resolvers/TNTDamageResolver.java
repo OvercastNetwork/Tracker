@@ -3,6 +3,8 @@ package tc.oc.tracker.damage.resolvers;
 import javax.annotation.Nonnull;
 import javax.annotation.Nullable;
 
+import org.bukkit.OfflinePlayer;
+import org.bukkit.block.BlockState;
 import org.bukkit.entity.LivingEntity;
 import org.bukkit.entity.Player;
 import org.bukkit.entity.TNTPrimed;
@@ -13,13 +15,16 @@ import tc.oc.tracker.DamageInfo;
 import tc.oc.tracker.DamageResolver;
 import tc.oc.tracker.Lifetime;
 import tc.oc.tracker.damage.TNTDamageInfo;
+import tc.oc.tracker.trackers.DispenserTracker;
 import tc.oc.tracker.trackers.ExplosiveTracker;
 
 public class TNTDamageResolver implements DamageResolver {
-    private final ExplosiveTracker tracker;
+    private final ExplosiveTracker explosiveTracker;
+    private final DispenserTracker dispenserTracker;
 
-    public TNTDamageResolver(ExplosiveTracker tracker) {
-        this.tracker = tracker;
+    public TNTDamageResolver(ExplosiveTracker explosiveTracker, DispenserTracker dispenserTracker) {
+        this.explosiveTracker = explosiveTracker;
+        this.dispenserTracker = dispenserTracker;
     }
 
     public @Nullable DamageInfo resolve(@Nonnull LivingEntity entity, @Nonnull Lifetime lifetime, @Nonnull EntityDamageEvent damageEvent) {
@@ -28,9 +33,13 @@ public class TNTDamageResolver implements DamageResolver {
 
             if(event.getDamager() instanceof TNTPrimed) {
                 TNTPrimed tnt = (TNTPrimed) event.getDamager();
-                Player owner = this.tracker.getOwner(tnt);
+                Player owner = this.explosiveTracker.getOwner(tnt);
+                OfflinePlayer blockOwner = null;
+                BlockState blockState = dispenserTracker.getOwner(tnt);
 
-                return new TNTDamageInfo(tnt, owner);
+                if(blockState != null) blockOwner = dispenserTracker.getPlacer(blockState.getBlock());
+
+                return new TNTDamageInfo(tnt, owner, blockOwner, blockState);
             }
         }
 
