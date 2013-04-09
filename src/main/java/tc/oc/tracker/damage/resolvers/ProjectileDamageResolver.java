@@ -4,9 +4,9 @@ import javax.annotation.Nonnull;
 import javax.annotation.Nullable;
 
 import org.bukkit.Location;
+import org.bukkit.OfflinePlayer;
 import org.bukkit.block.BlockState;
 import org.bukkit.entity.LivingEntity;
-import org.bukkit.entity.Player;
 import org.bukkit.entity.Projectile;
 import org.bukkit.event.entity.EntityDamageByEntityEvent;
 import org.bukkit.event.entity.EntityDamageEvent;
@@ -35,7 +35,7 @@ public class ProjectileDamageResolver implements DamageResolver {
                 Projectile projectile = (Projectile) event.getDamager();
                 Location launchLocation = this.projectiledistancetracker.getLaunchLocation(projectile);
                 Double projectileDistance = null;
-                Player blockOwner = null;
+                OfflinePlayer blockOwner = null;
                 BlockState blockState = dispensertracker.getOwner(projectile);
 
                 if (blockState != null) blockOwner = dispensertracker.getPlacer(blockState.getBlock());

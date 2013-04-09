@@ -7,6 +7,7 @@ import java.util.Map;
 import javax.annotation.Nonnull;
 import javax.annotation.Nullable;
 
+import org.bukkit.OfflinePlayer;
 import org.bukkit.World;
 import org.bukkit.block.Block;
 import org.bukkit.block.BlockState;
@@ -20,7 +21,7 @@ import tc.oc.tracker.base.AbstractTracker;
 import tc.oc.tracker.trackers.DispenserTracker;
 
 public class SimpleDispenserTracker extends AbstractTracker implements DispenserTracker {
-    private final HashMap<Block, Player> placedDispensers = Maps.newHashMap();
+    private final HashMap<Block, OfflinePlayer> placedDispensers = Maps.newHashMap();
     private final HashMap<Entity, BlockState> ownedEntitys = Maps.newHashMap();
 
     public boolean hasOwner(@Nonnull Entity entity) {
@@ -51,25 +52,28 @@ public class SimpleDispenserTracker extends AbstractTracker implements Dispenser
         return this.placedDispensers.containsKey(block);
     }
 
-    public @Nullable Player getPlacer(@Nonnull Block block) {
+    public @Nullable OfflinePlayer getPlacer(@Nonnull Block block) {
         Preconditions.checkNotNull(block, "block");
 
         return this.placedDispensers.get(block);
     }
 
-    public @Nullable Player setPlacer(@Nonnull Block block, @Nullable Player player) {
+    public @Nullable OfflinePlayer setPlacer(@Nonnull Block block, @Nonnull Player player) {
+        Preconditions.checkNotNull(block, "block");
+        Preconditions.checkNotNull(player, "player");
+
+        return this.placedDispensers.put(block, player.getPlayer());
+    }
+
+    public @Nonnull OfflinePlayer clearPlacer(@Nonnull Block block) {
         Preconditions.checkNotNull(block, "block");
 
-        if(player != null) {
-            return this.placedDispensers.put(block, player);
-        } else {
-            return this.placedDispensers.remove(block);
-        }
+        return this.placedDispensers.remove(block);
     }
 
     public void clear(@Nonnull World world) {
         // clear information about blocks in that world
-        for(Iterator<Map.Entry<Block, Player>> it = this.placedDispensers.entrySet().iterator(); it.hasNext(); ) {
+        for(Iterator<Map.Entry<Block, OfflinePlayer>> it = this.placedDispensers.entrySet().iterator(); it.hasNext(); ) {
             Block block = it.next().getKey();
             if(block.getWorld().equals(world)) {
                 it.remove();

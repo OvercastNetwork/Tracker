@@ -3,6 +3,7 @@ package tc.oc.tracker.trackers;
 import javax.annotation.Nonnull;
 import javax.annotation.Nullable;
 
+import org.bukkit.OfflinePlayer;
 import org.bukkit.block.Block;
 import org.bukkit.block.BlockState;
 import org.bukkit.entity.Entity;
@@ -19,7 +20,9 @@ public interface DispenserTracker extends Tracker {
 
     boolean hasPlacer(@Nonnull Block block);
 
-    @Nullable Player getPlacer(@Nonnull Block block);
+    @Nullable OfflinePlayer getPlacer(@Nonnull Block block);
 
-    @Nullable Player setPlacer(@Nonnull Block block, @Nullable Player player);
+    @Nullable OfflinePlayer setPlacer(@Nonnull Block block, @Nullable Player player);
+
+    @Nonnull OfflinePlayer clearPlacer(@Nonnull Block block);
 }

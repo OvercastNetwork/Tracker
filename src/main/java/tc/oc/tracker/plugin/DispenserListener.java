@@ -3,8 +3,8 @@ package tc.oc.tracker.plugin;
 import java.util.Iterator;
 
 import org.bukkit.Material;
+import org.bukkit.OfflinePlayer;
 import org.bukkit.block.Block;
-import org.bukkit.entity.Player;
 import org.bukkit.event.EventHandler;
 import org.bukkit.event.EventPriority;
 import org.bukkit.event.Listener;
@@ -35,7 +35,7 @@ public class DispenserListener implements Listener {
     public void onBlockBreak(BlockBreakEvent event) {
         if(!this.tracker.isEnabled(event.getBlock().getWorld())) return;
 
-        this.tracker.setPlacer(event.getBlock(), null);
+        this.tracker.clearPlacer(event.getBlock());
     }
 
     @EventHandler(priority = EventPriority.MONITOR, ignoreCancelled = true)
@@ -54,7 +54,7 @@ public class DispenserListener implements Listener {
         if(!this.tracker.isEnabled(event.getEntity().getWorld())) return;
 
         Block block = event.getBlock();
-        Player placer = this.tracker.getPlacer(block);
+        OfflinePlayer placer = this.tracker.getPlacer(block);
         if (placer != null) {
             this.tracker.setOwner(event.getEntity(), block.getState());
         }
