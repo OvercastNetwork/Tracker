@@ -44,10 +44,11 @@ public class SimpleProjectileDistanceTracker extends AbstractTracker implements 
 
     public void clear(World world) {
         // clear information about projectile launch locations in that world
-        for(Iterator<Map.Entry<Projectile, Location>> it = this.projectileLaunchLocations.entrySet().iterator(); it.hasNext(); ) {
-            Projectile projectile = it.next().getKey();
+        Iterator<Map.Entry<Projectile, Location>> projectileIt = this.projectileLaunchLocations.entrySet().iterator();
+        while(projectileIt.hasNext()) {
+            Projectile projectile = projectileIt.next().getKey();
             if(projectile.getWorld().equals(world)) {
-                it.remove();
+                projectileIt.remove();
             }
         }
     }

@@ -9,7 +9,7 @@ import org.bukkit.event.EventHandler;
 import org.bukkit.event.EventPriority;
 import org.bukkit.event.Listener;
 import org.bukkit.event.block.BlockBreakEvent;
-import org.bukkit.event.block.BlockDispenseEvent;
+import org.bukkit.event.block.BlockDispenseEntityEvent;
 import org.bukkit.event.block.BlockPlaceEvent;
 import org.bukkit.event.entity.EntityExplodeEvent;
 
@@ -26,7 +26,7 @@ public class DispenserListener implements Listener {
     public void onBlockPlace(BlockPlaceEvent event) {
         if(!this.tracker.isEnabled(event.getBlock().getWorld())) return;
 
-        if (event.getBlock().getType() == Material.DISPENSER) {
+        if(event.getBlock().getType() == Material.DISPENSER) {
             this.tracker.setPlacer(event.getBlock(), event.getPlayer());
         }
     }
@@ -43,19 +43,20 @@ public class DispenserListener implements Listener {
         if(!this.tracker.isEnabled(event.getEntity().getWorld())) return;
 
         // Remove all blocks that are destroyed from explosion
-        for(Iterator<Block> it = event.blockList().iterator(); it.hasNext(); ) {
+        Iterator<Block> it = event.blockList().iterator();
+        while(it.hasNext()) {
             Block block = it.next();
             this.tracker.setPlacer(block, null);
         }
     }
 
     @EventHandler(priority = EventPriority.MONITOR, ignoreCancelled = true)
-    public void onShoot(BlockDispenseEvent event) {
+    public void onDispense(BlockDispenseEntityEvent event) {
         if(!this.tracker.isEnabled(event.getEntity().getWorld())) return;
 
         Block block = event.getBlock();
         OfflinePlayer placer = this.tracker.getPlacer(block);
-        if (placer != null) {
+        if(placer != null) {
             this.tracker.setOwner(event.getEntity(), block.getState());
         }
     }

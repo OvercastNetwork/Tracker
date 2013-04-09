@@ -73,18 +73,20 @@ public class SimpleDispenserTracker extends AbstractTracker implements Dispenser
 
     public void clear(@Nonnull World world) {
         // clear information about blocks in that world
-        for(Iterator<Map.Entry<Block, OfflinePlayer>> it = this.placedDispensers.entrySet().iterator(); it.hasNext(); ) {
-            Block block = it.next().getKey();
+        Iterator<Map.Entry<Block, OfflinePlayer>> blockIt = this.placedDispensers.entrySet().iterator();
+        while(blockIt.hasNext()) {
+            Block block = blockIt.next().getKey();
             if(block.getWorld().equals(world)) {
-                it.remove();
+                blockIt.remove();
             }
         }
 
         // clear information about entitys in that world
-        for(Iterator<Map.Entry<Entity, BlockState>> it = this.ownedEntitys.entrySet().iterator(); it.hasNext(); ) {
-            Entity tnt = it.next().getKey();
+        Iterator<Map.Entry<Entity, BlockState>> entityIt = this.ownedEntitys.entrySet().iterator();
+        while(entityIt.hasNext()) {
+            Entity tnt = entityIt.next().getKey();
             if(tnt.getWorld().equals(world)) {
-                it.remove();
+                entityIt.remove();
             }
         }
     }

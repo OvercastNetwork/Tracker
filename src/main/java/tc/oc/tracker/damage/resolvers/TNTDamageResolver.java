@@ -19,12 +19,12 @@ import tc.oc.tracker.trackers.DispenserTracker;
 import tc.oc.tracker.trackers.ExplosiveTracker;
 
 public class TNTDamageResolver implements DamageResolver {
-    private final ExplosiveTracker explosivetracker;
-    private final DispenserTracker dispensertracker;
+    private final ExplosiveTracker explosiveTracker;
+    private final DispenserTracker dispenserTracker;
 
-    public TNTDamageResolver(ExplosiveTracker explosivetracker, DispenserTracker dispensertracker) {
-        this.explosivetracker = explosivetracker;
-        this.dispensertracker = dispensertracker;
+    public TNTDamageResolver(ExplosiveTracker explosiveTracker, DispenserTracker dispenserTracker) {
+        this.explosiveTracker = explosiveTracker;
+        this.dispenserTracker = dispenserTracker;
     }
 
     public @Nullable DamageInfo resolve(@Nonnull LivingEntity entity, @Nonnull Lifetime lifetime, @Nonnull EntityDamageEvent damageEvent) {
@@ -33,11 +33,11 @@ public class TNTDamageResolver implements DamageResolver {
 
             if(event.getDamager() instanceof TNTPrimed) {
                 TNTPrimed tnt = (TNTPrimed) event.getDamager();
-                Player owner = this.explosivetracker.getOwner(tnt);
+                Player owner = this.explosiveTracker.getOwner(tnt);
                 OfflinePlayer blockOwner = null;
-                BlockState blockState = dispensertracker.getOwner(tnt);
+                BlockState blockState = dispenserTracker.getOwner(tnt);
 
-                if (blockState != null) blockOwner = dispensertracker.getPlacer(blockState.getBlock());
+                if(blockState != null) blockOwner = dispenserTracker.getPlacer(blockState.getBlock());
 
                 return new TNTDamageInfo(tnt, owner, blockOwner, blockState);
             }
