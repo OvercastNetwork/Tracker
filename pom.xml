@@ -12,15 +12,15 @@
     </scm>
     <repositories>
         <repository>
-            <id>bukkit-repo</id>
-            <url>http://repo.bukkit.org/content/groups/public</url>
+            <id>overcast-network-repo</id>
+            <url>http://repo.oc.tc/content/groups/public</url>
         </repository>
     </repositories>
     <dependencies>
         <dependency>
             <groupId>tc.oc</groupId>
             <artifactId>sportbukkit-api</artifactId>
-            <version>1.5.1-R0.3-SNAPSHOT</version>
+            <version>1.5.2-R0.2-SNAPSHOT</version>
         </dependency>
         <dependency>
             <groupId>com.google.guava</groupId>
