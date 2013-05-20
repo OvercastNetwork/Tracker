@@ -40,7 +40,7 @@ public class DispenserListener implements Listener {
 
     @EventHandler(priority = EventPriority.MONITOR, ignoreCancelled = true)
     public void onBlockExplode(EntityExplodeEvent event) {
-        if(!this.tracker.isEnabled(event.getEntity().getWorld())) return;
+        if(!this.tracker.isEnabled(event.getLocation().getWorld())) return;
 
         // Remove all blocks that are destroyed from explosion
         Iterator<Block> it = event.blockList().iterator();
