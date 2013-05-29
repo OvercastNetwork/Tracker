@@ -46,7 +46,7 @@ public class DispenserListener implements Listener {
         Iterator<Block> it = event.blockList().iterator();
         while(it.hasNext()) {
             Block block = it.next();
-            this.tracker.setPlacer(block, null);
+            this.tracker.clearPlacer(block);
         }
     }
 
