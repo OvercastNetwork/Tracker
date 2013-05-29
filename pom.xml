@@ -10,9 +10,19 @@
         <developerConnection>scm:git:git@github.com:ProjectAres/Tracker.git</developerConnection>
         <url>https://github.com/ProjectAres/Tracker</url>
     </scm>
+    <distributionManagement>
+        <repository>
+            <id>overcast-public</id>
+            <url>http://repo.oc.tc/content/groups/public</url>
+        </repository>
+        <snapshotRepository>
+            <id>overcast-public</id>
+            <url>http://repo.oc.tc/content/groups/public</url>
+        </snapshotRepository>
+    </distributionManagement>
     <repositories>
         <repository>
-            <id>overcast-network-repo</id>
+            <id>overcast-public</id>
             <url>http://repo.oc.tc/content/groups/public</url>
         </repository>
     </repositories>
