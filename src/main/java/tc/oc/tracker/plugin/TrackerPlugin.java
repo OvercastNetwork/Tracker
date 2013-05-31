@@ -13,9 +13,11 @@ import tc.oc.tracker.damage.resolvers.*;
 import tc.oc.tracker.timer.TickTimer;
 import tc.oc.tracker.trackers.DispenserTracker;
 import tc.oc.tracker.trackers.ExplosiveTracker;
+import tc.oc.tracker.trackers.OwnedMobTracker;
 import tc.oc.tracker.trackers.ProjectileDistanceTracker;
 import tc.oc.tracker.trackers.base.SimpleDispenserTracker;
 import tc.oc.tracker.trackers.base.SimpleExplosiveTracker;
+import tc.oc.tracker.trackers.base.SimpleOwnedMobTracker;
 import tc.oc.tracker.trackers.base.gravity.SimpleGravityKillTracker;
 import tc.oc.tracker.trackers.base.SimpleProjectileDistanceTracker;
 
@@ -67,6 +69,12 @@ public class TrackerPlugin extends JavaPlugin {
         this.registerEvents(new ProjectileDistanceListener(projectileDistanceTracker));
         tm.setTracker(ProjectileDistanceTracker.class, projectileDistanceTracker);
 
+        OwnedMobTracker ownedMobTracker = new SimpleOwnedMobTracker();
+        ownedMobTracker.enable();
+
+        this.registerEvents(new OwnedMobListener(ownedMobTracker));
+        tm.setTracker(OwnedMobTracker.class, ownedMobTracker);
+
         // register damage resolvers
         DamageResolverManager drm = DamageResolvers.getManager();
 
@@ -79,6 +87,7 @@ public class TrackerPlugin extends JavaPlugin {
         drm.register(new VoidDamageResolver());
         drm.register(new GravityDamageResolver(gravityKillTracker, this.tickTimer));
         drm.register(new DispensedProjectileDamageResolver(projectileDistanceTracker, dispenserTracker));
+        drm.register(new OwnedMobDamageResolver(ownedMobTracker));
 
         // debug
         // this.registerEvents(new DebugListener());
