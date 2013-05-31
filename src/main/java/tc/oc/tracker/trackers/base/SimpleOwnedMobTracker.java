@@ -46,7 +46,9 @@ public class SimpleOwnedMobTracker extends AbstractTracker implements OwnedMobTr
     }
 
     public void clear(@Nonnull World world) {
-     // clear information about blocks in that world
+        Preconditions.checkNotNull(world, "world");
+
+        // clear information about owned mobs in that world
         Iterator<Map.Entry<LivingEntity, OfflinePlayer>> mobIt = this.ownedMobs.entrySet().iterator();
         while(mobIt.hasNext()) {
             LivingEntity entity = mobIt.next().getKey();

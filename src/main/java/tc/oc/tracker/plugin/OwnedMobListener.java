@@ -19,7 +19,7 @@ public class OwnedMobListener implements Listener {
     public void onMonsterSpawn(PlayerSpawnEntityEvent event) {
         if(!this.tracker.isEnabled(event.getEntity().getWorld())) return;
 
-        if (event.getEntity() instanceof LivingEntity) {
+        if(event.getEntity() instanceof LivingEntity) {
             this.tracker.setOwner((LivingEntity) event.getEntity(), event.getPlayer());
         }
     }
