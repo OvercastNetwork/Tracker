@@ -10,7 +10,6 @@ import javax.annotation.Nullable;
 import org.bukkit.OfflinePlayer;
 import org.bukkit.World;
 import org.bukkit.block.Block;
-import org.bukkit.block.BlockState;
 import org.bukkit.entity.Entity;
 import org.bukkit.entity.Player;
 
@@ -22,7 +21,7 @@ import tc.oc.tracker.trackers.DispenserTracker;
 
 public class SimpleDispenserTracker extends AbstractTracker implements DispenserTracker {
     private final HashMap<Block, OfflinePlayer> placedDispensers = Maps.newHashMap();
-    private final HashMap<Entity, BlockState> ownedEntitys = Maps.newHashMap();
+    private final HashMap<Entity, OfflinePlayer> ownedEntitys = Maps.newHashMap();
 
     public boolean hasOwner(@Nonnull Entity entity) {
         Preconditions.checkNotNull(entity, "entity");
@@ -30,17 +29,17 @@ public class SimpleDispenserTracker extends AbstractTracker implements Dispenser
         return this.ownedEntitys.containsKey(entity);
     }
 
-    public @Nullable BlockState getOwner(@Nonnull Entity entity) {
+    public @Nullable OfflinePlayer getOwner(@Nonnull Entity entity) {
         Preconditions.checkNotNull(entity, "entity");
 
         return this.ownedEntitys.get(entity);
     }
 
-    public @Nullable BlockState setOwner(@Nonnull Entity entity, @Nullable BlockState block) {
+    public @Nullable OfflinePlayer setOwner(@Nonnull Entity entity, @Nullable Player player) {
         Preconditions.checkNotNull(entity, "tnt entity");
 
-        if(block != null) {
-            return this.ownedEntitys.put(entity, block);
+        if(player != null) {
+            return this.ownedEntitys.put(entity, player);
         } else {
             return this.ownedEntitys.remove(entity);
         }
@@ -82,7 +81,7 @@ public class SimpleDispenserTracker extends AbstractTracker implements Dispenser
         }
 
         // clear information about entitys in that world
-        Iterator<Map.Entry<Entity, BlockState>> entityIt = this.ownedEntitys.entrySet().iterator();
+        Iterator<Map.Entry<Entity, OfflinePlayer>> entityIt = this.ownedEntitys.entrySet().iterator();
         while(entityIt.hasNext()) {
             Entity tnt = entityIt.next().getKey();
             if(tnt.getWorld().equals(world)) {

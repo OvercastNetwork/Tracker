@@ -3,8 +3,6 @@ package tc.oc.tracker.damage.resolvers;
 import javax.annotation.Nonnull;
 import javax.annotation.Nullable;
 
-import org.bukkit.OfflinePlayer;
-import org.bukkit.block.BlockState;
 import org.bukkit.entity.LivingEntity;
 import org.bukkit.entity.Player;
 import org.bukkit.entity.TNTPrimed;
@@ -33,13 +31,15 @@ public class TNTDamageResolver implements DamageResolver {
 
             if(event.getDamager() instanceof TNTPrimed) {
                 TNTPrimed tnt = (TNTPrimed) event.getDamager();
-                Player owner = this.explosiveTracker.getOwner(tnt);
-                OfflinePlayer blockOwner = null;
-                BlockState blockState = dispenserTracker.getOwner(tnt);
+                Player owner = null;
+                if(this.explosiveTracker.hasOwner(tnt)) {
+                    owner = this.explosiveTracker.getOwner(tnt);
+                } else if(this.dispenserTracker.hasOwner(tnt)) {
+                    // getPlayer() is temporary to keep owner uniform until other trackers use OfflinePlayer
+                    owner = this.dispenserTracker.getOwner(tnt).getPlayer();
+                }
 
-                if(blockState != null) blockOwner = dispenserTracker.getPlacer(blockState.getBlock());
-
-                return new TNTDamageInfo(tnt, owner, blockOwner, blockState);
+                return new TNTDamageInfo(tnt, owner);
             }
         }
 

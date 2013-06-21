@@ -57,7 +57,7 @@ public class DispenserListener implements Listener {
         Block block = event.getBlock();
         OfflinePlayer placer = this.tracker.getPlacer(block);
         if(placer != null) {
-            this.tracker.setOwner(event.getEntity(), block.getState());
+            this.tracker.setOwner(event.getEntity(), placer.getPlayer());
         }
     }
 }
