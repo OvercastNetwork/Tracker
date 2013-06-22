@@ -24,7 +24,7 @@ public class ProjectileDamageInfo extends AbstractDamageInfo {
         return this.projectile;
     }
 
-    public @Nullable double getDistance() {
+    public @Nullable Double getDistance() {
         return this.projectileDistance;
     }
 
