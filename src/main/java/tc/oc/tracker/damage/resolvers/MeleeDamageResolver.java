@@ -24,7 +24,7 @@ public class MeleeDamageResolver implements DamageResolver {
                 LivingEntity attacker = (LivingEntity) entityEvent.getDamager();
 
                 Material weaponMaterial;
-                ItemStack held = entity.getEquipment().getItemInHand();
+                ItemStack held = attacker.getEquipment().getItemInHand();
                 if(held != null) {
                     weaponMaterial = held.getType();
                 } else {
