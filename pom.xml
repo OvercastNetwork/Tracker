@@ -5,6 +5,10 @@
     <version>0.1.0-SNAPSHOT</version>
     <name>Tracker</name>
     <description>Bukkit plugin and API for tracking entity damage and deaths.</description>
+    <properties>
+        <plugin.mainClass>tc.oc.tracker.plugin.TrackerPlugin</plugin.mainClass>
+        <plugin.prefix>Tracker</plugin.prefix>
+    </properties>
     <scm>
         <connection>scm:git:git@github.com:ProjectAres/Tracker.git</connection>
         <developerConnection>scm:git:git@github.com:ProjectAres/Tracker.git</developerConnection>
