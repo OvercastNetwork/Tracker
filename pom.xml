@@ -6,31 +6,31 @@
     <name>Tracker</name>
     <description>Bukkit plugin and API for tracking entity damage and deaths.</description>
     <scm>
-        <connection>scm:git:git@github.com:ProjectAres/Tracker.git</connection>
-        <developerConnection>scm:git:git@github.com:ProjectAres/Tracker.git</developerConnection>
-        <url>https://github.com/ProjectAres/Tracker</url>
+        <connection>scm:git:git@github.com:OvercastNetwork/Tracker.git</connection>
+        <developerConnection>scm:git:git@github.com:OvercastNetwork/Tracker.git</developerConnection>
+        <url>https://github.com/OvercastNetwork/Tracker</url>
     </scm>
     <distributionManagement>
         <repository>
-            <id>overcast-public</id>
-            <url>http://repo.oc.tc/content/groups/public</url>
+            <id>overcast-deployment</id>
+            <url>https://repo.oc.tc/content/repositories/releases</url>
         </repository>
         <snapshotRepository>
-            <id>overcast-public</id>
-            <url>http://repo.oc.tc/content/groups/public</url>
+            <id>overcast-deployment</id>
+            <url>https://repo.oc.tc/content/repositories/snapshots</url>
         </snapshotRepository>
     </distributionManagement>
     <repositories>
         <repository>
-            <id>overcast-public</id>
-            <url>http://repo.oc.tc/content/groups/public</url>
+            <id>overcast</id>
+            <url>https://repo.oc.tc/content/groups/public</url>
         </repository>
     </repositories>
     <dependencies>
         <dependency>
             <groupId>tc.oc</groupId>
             <artifactId>sportbukkit-api</artifactId>
-            <version>1.5.2-R1.1-SNAPSHOT</version>
+            <version>1.6.4-R0.1-SNAPSHOT</version>
         </dependency>
         <dependency>
             <groupId>com.google.guava</groupId>

@@ -60,7 +60,7 @@ public class EntityDamageEventListener implements Listener {
             // get our version of the event
             EntityDamageEvent our = DamageAPIHelper.get().getOurEvent(bukkit);
             if(our == null) {
-                int hearts = bukkit.getDamage();
+                int hearts = (int) bukkit.getDamage();
                 Location location = entity.getLocation();
                 Instant time = Instant.now();
                 DamageInfo info = DamageResolvers.getManager().resolve(entity, lifetime, bukkit);
@@ -71,7 +71,7 @@ public class EntityDamageEventListener implements Listener {
 
             // update mutable information
             our.setCancelled(bukkit.isCancelled());
-            our.setDamage(bukkit.getDamage());
+            our.setDamage((int) bukkit.getDamage());
 
             // call
             EventUtil.callEvent(our, EntityDamageEvent.getHandlerList(), this.priority);
