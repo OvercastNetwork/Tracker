@@ -28,7 +28,6 @@ public final class DamageAPI {
      * @return the final {@link Damage} object (never null)
      *
      * @throws NullPointerException if entity or info is null
-     * @throws IllegalArgumentExcpetion if hearts is less than zero
      */
     public static @Nonnull Damage inflictDamage(@Nonnull LivingEntity entity, int damage, @Nonnull DamageInfo info) {
         Preconditions.checkNotNull(entity, "living entity");
@@ -37,7 +36,7 @@ public final class DamageAPI {
 
         DamageAPIHelper helper = DamageAPIHelper.get();
 
-        EntityDamageEvent event = new EntityDamageEvent(entity, DamageCause.CUSTOM, damage);
+        EntityDamageEvent event = new EntityDamageEvent(entity, DamageCause.CUSTOM, (double) damage);
         helper.setEventDamageInfo(event, info);
 
         Bukkit.getPluginManager().callEvent(event);

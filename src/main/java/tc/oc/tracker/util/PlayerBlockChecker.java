@@ -12,8 +12,8 @@ public class PlayerBlockChecker {
     public static final float PLAYER_RADIUS = PLAYER_WIDTH / 2.0f;
 
     public static boolean isClimbing(Entity entity) {
-        int blockId = entity.getWorld().getBlockTypeIdAt(entity.getLocation());
-        return blockId == Material.LADDER.getId() || blockId == Material.VINE.getId();
+        Material blockType = entity.getWorld().getBlockAt(entity.getLocation()).getType();
+        return blockType == Material.LADDER || blockType == Material.VINE;
     }
 
     public static boolean isSwimming(Entity entity, Material material) {
