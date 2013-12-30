@@ -9,28 +9,10 @@ import tc.oc.tracker.DamageResolverManager;
 import tc.oc.tracker.DamageResolvers;
 import tc.oc.tracker.TrackerManager;
 import tc.oc.tracker.Trackers;
-import tc.oc.tracker.damage.resolvers.AnvilDamageResolver;
-import tc.oc.tracker.damage.resolvers.BlockDamageResolver;
-import tc.oc.tracker.damage.resolvers.DispensedProjectileDamageResolver;
-import tc.oc.tracker.damage.resolvers.FallDamageResolver;
-import tc.oc.tracker.damage.resolvers.GravityDamageResolver;
-import tc.oc.tracker.damage.resolvers.LavaDamageResolver;
-import tc.oc.tracker.damage.resolvers.MeleeDamageResolver;
-import tc.oc.tracker.damage.resolvers.OwnedMobDamageResolver;
-import tc.oc.tracker.damage.resolvers.ProjectileDamageResolver;
-import tc.oc.tracker.damage.resolvers.TNTDamageResolver;
-import tc.oc.tracker.damage.resolvers.VoidDamageResolver;
+import tc.oc.tracker.damage.resolvers.*;
 import tc.oc.tracker.timer.TickTimer;
-import tc.oc.tracker.trackers.AnvilTracker;
-import tc.oc.tracker.trackers.DispenserTracker;
-import tc.oc.tracker.trackers.ExplosiveTracker;
-import tc.oc.tracker.trackers.OwnedMobTracker;
-import tc.oc.tracker.trackers.ProjectileDistanceTracker;
-import tc.oc.tracker.trackers.base.SimpleAnvilTracker;
-import tc.oc.tracker.trackers.base.SimpleDispenserTracker;
-import tc.oc.tracker.trackers.base.SimpleExplosiveTracker;
-import tc.oc.tracker.trackers.base.SimpleOwnedMobTracker;
-import tc.oc.tracker.trackers.base.SimpleProjectileDistanceTracker;
+import tc.oc.tracker.trackers.*;
+import tc.oc.tracker.trackers.base.*;
 import tc.oc.tracker.trackers.base.gravity.SimpleGravityKillTracker;
 
 public class TrackerPlugin extends JavaPlugin {
@@ -93,6 +75,12 @@ public class TrackerPlugin extends JavaPlugin {
         this.registerEvents(new AnvilListener(anvilTracker));
         tm.setTracker(AnvilTracker.class, anvilTracker);
 
+        FireEnchantTracker fireTracker = new SimpleFireEnchantTracker();
+        fireTracker.enable();
+
+        this.registerEvents(new FireEnchantListener(fireTracker, this, this.tickTimer));
+        tm.setTracker(FireEnchantTracker.class, fireTracker);
+
         // register damage resolvers
         DamageResolverManager drm = DamageResolvers.getManager();
 
@@ -107,6 +95,8 @@ public class TrackerPlugin extends JavaPlugin {
         drm.register(new DispensedProjectileDamageResolver(projectileDistanceTracker, dispenserTracker));
         drm.register(new OwnedMobDamageResolver(ownedMobTracker));
         drm.register(new AnvilDamageResolver(anvilTracker));
+        drm.register(new FireEnchantDamageResolver(fireTracker));
+
 
         // debug
         // this.registerEvents(new DebugListener());
