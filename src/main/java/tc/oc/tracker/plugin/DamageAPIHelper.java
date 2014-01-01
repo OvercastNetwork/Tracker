@@ -55,7 +55,7 @@ public final class DamageAPIHelper {
      * the same through stable version releases.
      *
      * @param event Specified event
-     * @param damage Damage info that describes the damage or null to clear the
+     * @param info Damage info that describes the damage or null to clear the
      *               store information
      * @return Previous damage info associated with the event
      *
