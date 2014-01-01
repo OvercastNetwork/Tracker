@@ -9,17 +9,7 @@ import tc.oc.tracker.DamageResolverManager;
 import tc.oc.tracker.DamageResolvers;
 import tc.oc.tracker.TrackerManager;
 import tc.oc.tracker.Trackers;
-import tc.oc.tracker.damage.resolvers.AnvilDamageResolver;
-import tc.oc.tracker.damage.resolvers.BlockDamageResolver;
-import tc.oc.tracker.damage.resolvers.DispensedProjectileDamageResolver;
-import tc.oc.tracker.damage.resolvers.FallDamageResolver;
-import tc.oc.tracker.damage.resolvers.GravityDamageResolver;
-import tc.oc.tracker.damage.resolvers.LavaDamageResolver;
-import tc.oc.tracker.damage.resolvers.MeleeDamageResolver;
-import tc.oc.tracker.damage.resolvers.OwnedMobDamageResolver;
-import tc.oc.tracker.damage.resolvers.ProjectileDamageResolver;
-import tc.oc.tracker.damage.resolvers.TNTDamageResolver;
-import tc.oc.tracker.damage.resolvers.VoidDamageResolver;
+import tc.oc.tracker.damage.resolvers.*;
 import tc.oc.tracker.timer.TickTimer;
 import tc.oc.tracker.trackers.AnvilTracker;
 import tc.oc.tracker.trackers.DispenserTracker;
@@ -107,6 +97,7 @@ public class TrackerPlugin extends JavaPlugin {
         drm.register(new DispensedProjectileDamageResolver(projectileDistanceTracker, dispenserTracker));
         drm.register(new OwnedMobDamageResolver(ownedMobTracker));
         drm.register(new AnvilDamageResolver(anvilTracker));
+        drm.register(new PotionDamageResolver());
 
         // debug
         // this.registerEvents(new DebugListener());
