@@ -9,10 +9,6 @@
 /.project
 /.settings
 
-# IntelliJ generated files
-*.iml
-.idea/
-
 # Vim generated files
 *~
 *.swp
