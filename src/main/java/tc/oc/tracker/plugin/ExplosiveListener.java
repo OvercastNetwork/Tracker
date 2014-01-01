@@ -14,6 +14,7 @@ import org.bukkit.event.block.BlockBreakEvent;
 import org.bukkit.event.block.BlockPistonExtendEvent;
 import org.bukkit.event.block.BlockPistonRetractEvent;
 import org.bukkit.event.block.BlockPlaceEvent;
+import org.bukkit.event.entity.EntityShootBowEvent;
 import org.bukkit.event.entity.ExplosionPrimeEvent;
 
 import tc.oc.tracker.trackers.ExplosiveTracker;
@@ -97,6 +98,18 @@ public class ExplosiveListener implements Listener {
                     this.tracker.setOwner(tnt, placer);
                 }
             }
+        }
+    }
+
+    @EventHandler(priority = EventPriority.MONITOR, ignoreCancelled = true)
+    public void onBowShoot(EntityShootBowEvent event) {
+        if(!this.tracker.isEnabled(event.getEntity().getWorld())) return;
+        if (!(event.getEntity() instanceof Player)) return;
+
+        if(event.getProjectile() instanceof TNTPrimed) {
+            TNTPrimed tnt = (TNTPrimed) event.getProjectile();
+            Player player = (Player) event.getEntity();
+            this.tracker.setOwner(tnt, player);
         }
     }
 }
