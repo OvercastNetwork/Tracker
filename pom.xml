@@ -50,12 +50,12 @@
         </dependency>
     </dependencies>
     <build>
-        <sourceDirectory>${basedir}/src/main/java/</sourceDirectory>
+        <sourceDirectory>${project.basedir}/src/main/java/</sourceDirectory>
         <resources>
             <resource>
                 <targetPath>.</targetPath>
                 <filtering>true</filtering>
-                <directory>${basedir}/src/main/resources/</directory>
+                <directory>${project.basedir}/src/main/resources/</directory>
             </resource>
         </resources>
         <plugins>
