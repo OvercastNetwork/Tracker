@@ -1,6 +1,10 @@
 # Maven generated files
 /target
 
+# IntelliJ generated files
+.idea/
+*.iml
+
 # Mac OSX generated files
 .DS_Store
 
