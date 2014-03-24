@@ -64,7 +64,7 @@ public class TrackerPlugin extends JavaPlugin {
         gravityKillTracker.enable();
 
         this.registerEvents(new ExplosiveListener(explosiveTracker));
-        this.registerEvents(new GravityListener(this, gravityKillTracker, this.tickTimer));
+        this.registerEvents(new GravityListener(this, gravityKillTracker));
 
         tm.setTracker(ExplosiveTracker.class, explosiveTracker);
         tm.setTracker(SimpleGravityKillTracker.class, gravityKillTracker);
@@ -103,7 +103,7 @@ public class TrackerPlugin extends JavaPlugin {
         drm.register(new ProjectileDamageResolver(projectileDistanceTracker));
         drm.register(new TNTDamageResolver(explosiveTracker, dispenserTracker));
         drm.register(new VoidDamageResolver());
-        drm.register(new GravityDamageResolver(gravityKillTracker, this.tickTimer));
+        drm.register(new GravityDamageResolver(gravityKillTracker));
         drm.register(new DispensedProjectileDamageResolver(projectileDistanceTracker, dispenserTracker));
         drm.register(new OwnedMobDamageResolver(ownedMobTracker));
         drm.register(new AnvilDamageResolver(anvilTracker));
