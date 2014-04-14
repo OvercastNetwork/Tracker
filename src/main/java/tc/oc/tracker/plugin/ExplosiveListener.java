@@ -14,6 +14,7 @@ import org.bukkit.event.block.BlockBreakEvent;
 import org.bukkit.event.block.BlockPistonExtendEvent;
 import org.bukkit.event.block.BlockPistonRetractEvent;
 import org.bukkit.event.block.BlockPlaceEvent;
+import org.bukkit.event.entity.EntityExplodeEvent;
 import org.bukkit.event.entity.ExplosionPrimeEvent;
 
 import tc.oc.tracker.trackers.ExplosiveTracker;
@@ -95,6 +96,23 @@ public class ExplosiveListener implements Listener {
                 Player placer = this.tracker.setPlacer(block, null);
                 if(placer != null) {
                     this.tracker.setOwner(tnt, placer);
+                }
+            }
+        }
+    }
+
+    @EventHandler(priority = EventPriority.MONITOR, ignoreCancelled = true)
+    public void onTNTChain(EntityExplodeEvent event) {
+        if(!this.tracker.isEnabled(event.getEntity().getWorld())) return;
+
+        // Transfer ownership to chain-activated TNT
+        if(event.getEntity() instanceof TNTPrimed) {
+            Player owner = this.tracker.setOwner((TNTPrimed) event.getEntity(), null);
+            if(owner != null) {
+                for(Block block : event.blockList()) {
+                    if(block.getType() == Material.TNT) {
+                        this.tracker.setPlacer(block, owner);
+                    }
                 }
             }
         }
