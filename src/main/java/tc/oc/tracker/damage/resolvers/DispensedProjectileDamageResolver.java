@@ -39,7 +39,9 @@ public class DispensedProjectileDamageResolver implements DamageResolver {
 
                 if(launchLocation != null) projectileDistance = event.getEntity().getLocation().distance(launchLocation);
 
-                return new DispensedProjectileDamageInfo(projectile, projectile.getShooter(), projectileDistance, dispenserOwner);
+                if(projectile.getShooter() instanceof LivingEntity) {
+                    return new DispensedProjectileDamageInfo(projectile, (LivingEntity) projectile.getShooter(), projectileDistance, dispenserOwner);
+                }
             }
         }
         return null;

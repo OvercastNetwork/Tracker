@@ -29,7 +29,7 @@ public class OwnedMobDamageResolver implements DamageResolver {
             if(event.getDamager() instanceof Projectile) {
                 if(((Projectile) event.getDamager()).getShooter() == null) return null;
                 if(!(((Projectile) event.getDamager()).getShooter() instanceof Player) && ((Projectile) event.getDamager()).getShooter() instanceof LivingEntity) {
-                    LivingEntity mob = ((Projectile) event.getDamager()).getShooter();
+                    LivingEntity mob = (LivingEntity) ((Projectile) event.getDamager()).getShooter();
                     Player mobOwner = this.ownedMobTracker.getOwner(mob);
 
                     if(mobOwner != null) return new OwnedMobDamageInfo(mob, mobOwner, (Projectile) event.getDamager());

@@ -132,8 +132,8 @@ public class SimpleGravityKillTracker extends AbstractTracker {
 
         // Figure out the entity responsible for the attack and bail if it's not living
         Fall.Cause cause;
-        if(attacker instanceof Projectile) {
-            attacker = ((Projectile) attacker).getShooter();
+        if(attacker instanceof Projectile && ((Projectile) attacker).getShooter() instanceof LivingEntity) {
+            attacker = (LivingEntity) ((Projectile) attacker).getShooter();
             cause = Fall.Cause.SHOOT;
         } else {
             cause = Fall.Cause.HIT;
