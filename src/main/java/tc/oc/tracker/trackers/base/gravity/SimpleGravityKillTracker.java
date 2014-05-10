@@ -35,7 +35,7 @@ public class SimpleGravityKillTracker extends AbstractTracker {
     public static final long MAX_ON_GROUND_TIME = 10;
 
     // A player's fall is cancelled if they touch the ground more than this many times
-    public static final long MAX_GROUND_TOUCHES = 1;
+    public static final long MAX_GROUND_TOUCHES = 2;
 
     // A player's fall is cancelled if they are in water for more than this many ticks
     public static final long MAX_SWIMMING_TIME = 20;
