@@ -2,9 +2,6 @@ package tc.oc.tracker.util;
 
 import org.bukkit.Location;
 import org.bukkit.Material;
-import org.bukkit.World;
-import org.bukkit.block.Block;
-import org.bukkit.entity.Entity;
 
 public class PlayerBlockChecker {
     public static boolean isClimbing(Location location) {

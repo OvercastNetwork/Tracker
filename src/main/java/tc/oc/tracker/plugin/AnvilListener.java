@@ -47,9 +47,7 @@ public class AnvilListener implements Listener {
         if(!this.tracker.isEnabled(event.getLocation().getWorld())) return;
 
         // Remove all blocks that are destroyed from explosion
-        Iterator<Block> it = event.blockList().iterator();
-        while(it.hasNext()) {
-            Block block = it.next();
+        for (Block block : event.blockList()) {
             this.tracker.clearPlacer(block);
         }
     }

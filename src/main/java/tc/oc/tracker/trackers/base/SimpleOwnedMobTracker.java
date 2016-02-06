@@ -2,6 +2,7 @@ package tc.oc.tracker.trackers.base;
 
 import java.util.Iterator;
 import java.util.Map;
+import java.util.Map.Entry;
 
 import javax.annotation.Nonnull;
 import javax.annotation.Nullable;
@@ -48,10 +49,9 @@ public class SimpleOwnedMobTracker extends AbstractTracker implements OwnedMobTr
         Preconditions.checkNotNull(world, "world");
 
         // clear information about owned mobs in that world
-        Iterator<Map.Entry<LivingEntity, Player>> mobIt = this.ownedMobs.entrySet().iterator();
-        while(mobIt.hasNext()) {
-            LivingEntity entity = mobIt.next().getKey();
-            if(entity.getWorld().equals(world)) {
+        for (Entry<LivingEntity, Player> livingEntityPlayerEntry : this.ownedMobs.entrySet()) {
+            LivingEntity entity = livingEntityPlayerEntry.getKey();
+            if (entity.getWorld().equals(world)) {
                 entity.remove();
             }
         }

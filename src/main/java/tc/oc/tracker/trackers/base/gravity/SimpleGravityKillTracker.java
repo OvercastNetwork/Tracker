@@ -20,8 +20,8 @@ import tc.oc.tracker.timer.TickTimer;
 import tc.oc.tracker.util.PlayerBlockChecker;
 
 public class SimpleGravityKillTracker extends AbstractTracker {
-    private final HashMap<Location, BrokenBlock> brokenBlocks = new HashMap<Location, BrokenBlock>();
-    private final HashMap<Player, Fall> falls = new HashMap<Player, Fall>();
+    private final HashMap<Location, BrokenBlock> brokenBlocks = new HashMap<>();
+    private final HashMap<Player, Fall> falls = new HashMap<>();
 
     // A player must leave the ground within this many ticks of being attacked for
     // the fall to be caused by knockback from that attack

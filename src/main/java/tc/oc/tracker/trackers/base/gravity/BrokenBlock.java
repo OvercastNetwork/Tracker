@@ -6,8 +6,6 @@ import org.bukkit.Location;
 import org.bukkit.block.Block;
 import org.bukkit.entity.Player;
 
-import tc.oc.tracker.util.PlayerBlockChecker;
-
 public class BrokenBlock {
     private static final float PLAYER_WIDTH = 0.6f;
     private static final float PLAYER_RADIUS = PLAYER_WIDTH / 2.0f;

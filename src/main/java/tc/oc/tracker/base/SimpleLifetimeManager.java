@@ -57,5 +57,5 @@ public class SimpleLifetimeManager implements LifetimeManager {
         }
     }
 
-    private final Map<LivingEntity, Lifetime> lifetimes = new WeakHashMap<LivingEntity, Lifetime>();
+    private final Map<LivingEntity, Lifetime> lifetimes = new WeakHashMap<>();
 }
