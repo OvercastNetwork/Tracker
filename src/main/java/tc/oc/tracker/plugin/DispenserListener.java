@@ -1,7 +1,5 @@
 package tc.oc.tracker.plugin;
 
-import java.util.Iterator;
-
 import org.bukkit.Material;
 import org.bukkit.OfflinePlayer;
 import org.bukkit.block.Block;
@@ -9,11 +7,12 @@ import org.bukkit.event.EventHandler;
 import org.bukkit.event.EventPriority;
 import org.bukkit.event.Listener;
 import org.bukkit.event.block.BlockBreakEvent;
-import org.bukkit.event.block.BlockDispenseEntityEvent;
 import org.bukkit.event.block.BlockPlaceEvent;
 import org.bukkit.event.entity.EntityExplodeEvent;
-
+import tc.oc.tracker.event.BlockDispenseEntityEvent;
 import tc.oc.tracker.trackers.DispenserTracker;
+
+import java.util.Iterator;
 
 public class DispenserListener implements Listener {
     private final DispenserTracker tracker;

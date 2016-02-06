@@ -1,29 +1,20 @@
 package tc.oc.tracker.plugin;
 
-import javax.annotation.Nonnull;
-
+import com.google.common.base.Preconditions;
 import org.bukkit.GameMode;
-import org.bukkit.Location;
-import org.bukkit.Material;
 import org.bukkit.entity.Player;
 import org.bukkit.event.EventHandler;
 import org.bukkit.event.EventPriority;
 import org.bukkit.event.Listener;
 import org.bukkit.event.block.BlockBreakEvent;
 import org.bukkit.event.entity.EntityDamageByEntityEvent;
-import org.bukkit.event.entity.EntityDamageEvent;
 import org.bukkit.event.entity.PlayerDeathEvent;
 import org.bukkit.event.player.PlayerGameModeChangeEvent;
 import org.bukkit.event.player.PlayerMoveEvent;
-import org.bukkit.event.player.PlayerOnGroundEvent;
-import org.bukkit.event.player.PlayerQuitEvent;
-import tc.oc.tracker.timer.TickTimer;
-import tc.oc.tracker.trackers.base.gravity.Fall;
-import tc.oc.tracker.trackers.base.gravity.BrokenBlock;
+import tc.oc.tracker.event.PlayerOnGroundEvent;
 import tc.oc.tracker.trackers.base.gravity.SimpleGravityKillTracker;
-import tc.oc.tracker.util.PlayerBlockChecker;
 
-import com.google.common.base.Preconditions;
+import javax.annotation.Nonnull;
 
 public class GravityListener implements Listener {
     public GravityListener(@Nonnull TrackerPlugin plugin, @Nonnull SimpleGravityKillTracker tracker) {
