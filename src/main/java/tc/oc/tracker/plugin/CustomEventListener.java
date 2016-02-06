@@ -45,7 +45,7 @@ public class CustomEventListener implements Listener {
             call.setCancelled(event.isCancelled());
 
             for (EventPriority priority : EventPriority.values())
-                EventUtil.callEvent(call, BlockFallEvent.getHandlerList(), priority);
+                EventUtil.callEvent(call, BlockDispenseEntityEvent.getHandlerList(), priority);
 
             event.setCancelled(call.isCancelled());
         }
@@ -65,7 +65,7 @@ public class CustomEventListener implements Listener {
         call.setCancelled(event.isCancelled());
 
         for (EventPriority priority : EventPriority.values())
-            EventUtil.callEvent(call, BlockFallEvent.getHandlerList(), priority);
+            EventUtil.callEvent(call, PlayerCoarseMoveEvent.getHandlerList(), priority);
 
         event.setCancelled(call.isCancelled());
         event.setFrom(call.getFrom());
@@ -74,22 +74,17 @@ public class CustomEventListener implements Listener {
 
     @EventHandler(priority = EventPriority.MONITOR, ignoreCancelled = true)
     public void onPlayerOnGroundCall(PlayerCoarseMoveEvent event) {
-        Material belowFrom = event.getTo().add(0, -1, 0).getBlock().getType();
-        Material belowTo = event.getTo().add(0, -1, 0).getBlock().getType();
+        Material belowFrom = event.getTo().clone().add(0, -1, 0).getBlock().getType();
+        Material belowTo = event.getTo().clone().add(0, -1, 0).getBlock().getType();
 
-        PlayerOnGroundEvent call = null;
+        PlayerOnGroundEvent call;
 
-        if (belowFrom != Material.AIR && belowTo == Material.AIR) {
+        if (belowFrom != Material.AIR && belowTo == Material.AIR)
             call = new PlayerOnGroundEvent(event.getPlayer(), false);
-            for (EventPriority priority : EventPriority.values())
-                EventUtil.callEvent(call, PlayerOnGroundEvent.getHandlerList(), priority);
-        }
-        else if (belowFrom == Material.AIR && belowTo != Material.AIR) {
+        else if (belowFrom == Material.AIR && belowTo != Material.AIR)
             call = new PlayerOnGroundEvent(event.getPlayer(), true);
-        }
-        else {
+        else
             return;
-        }
 
         for (EventPriority priority : EventPriority.values())
             EventUtil.callEvent(call, PlayerOnGroundEvent.getHandlerList(), priority);
