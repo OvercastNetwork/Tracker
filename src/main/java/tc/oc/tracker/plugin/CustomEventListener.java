@@ -74,7 +74,7 @@ public class CustomEventListener implements Listener {
 
     @EventHandler(priority = EventPriority.MONITOR, ignoreCancelled = true)
     public void onPlayerOnGroundCall(PlayerCoarseMoveEvent event) {
-        Material belowFrom = event.getTo().clone().add(0, -1, 0).getBlock().getType();
+        Material belowFrom = event.getFrom().clone().add(0, -1, 0).getBlock().getType();
         Material belowTo = event.getTo().clone().add(0, -1, 0).getBlock().getType();
 
         PlayerOnGroundEvent call;
