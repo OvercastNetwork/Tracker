@@ -9,15 +9,8 @@ import tc.oc.tracker.Lifetime;
 
 import javax.annotation.Nonnull;
 
-public class PlayerDamageEvent extends EntityDamageEvent {
-    private final Player player;
-
+public class PlayerDamageEvent extends EntityDamageEvent<Player> {
     public PlayerDamageEvent(@Nonnull Player player, @Nonnull Lifetime lifetime, int damage, @Nonnull Location location, @Nonnull Instant time, @Nonnull DamageInfo info) {
         super(player, lifetime, damage, location, time, info);
-        this.player = player;
-    }
-
-    public Player getPlayer() {
-        return this.player;
     }
 }

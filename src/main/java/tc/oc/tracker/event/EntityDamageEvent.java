@@ -19,8 +19,8 @@ import com.google.common.base.Preconditions;
 /**
  * Called when an entity undergoes some type of damage.
  */
-public class EntityDamageEvent extends Event implements Cancellable {
-    private final @Nonnull LivingEntity entity;
+public class EntityDamageEvent<T extends LivingEntity> extends Event implements Cancellable {
+    private final @Nonnull T entity;
     private final @Nonnull Lifetime lifetime;
     private int damage;
     private final @Nonnull Location location;
@@ -28,7 +28,7 @@ public class EntityDamageEvent extends Event implements Cancellable {
     private final @Nonnull DamageInfo info;
     private boolean cancelled = false;
 
-    public EntityDamageEvent(@Nonnull LivingEntity entity, @Nonnull Lifetime lifetime, int damage, @Nonnull Location location, @Nonnull Instant time, @Nonnull DamageInfo info) {
+    public EntityDamageEvent(@Nonnull T entity, @Nonnull Lifetime lifetime, int damage, @Nonnull Location location, @Nonnull Instant time, @Nonnull DamageInfo info) {
         Preconditions.checkNotNull(entity, "entity");
         Preconditions.checkNotNull(lifetime, "lifetime");
         Preconditions.checkArgument(damage >= 0, "damage must be greater than or equal to zero");
@@ -44,7 +44,7 @@ public class EntityDamageEvent extends Event implements Cancellable {
         this.info = info;
     }
 
-    public @Nonnull LivingEntity getEntity() {
+    public @Nonnull T getEntity() {
         return this.entity;
     }
 
