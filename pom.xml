@@ -5,32 +5,40 @@
     <version>0.1.0-SNAPSHOT</version>
     <name>Tracker</name>
     <description>Bukkit plugin and API for tracking entity damage and deaths.</description>
+
     <scm>
-        <connection>scm:git:git@github.com:OvercastNetwork/Tracker.git</connection>
-        <developerConnection>scm:git:git@github.com:OvercastNetwork/Tracker.git</developerConnection>
-        <url>https://github.com/OvercastNetwork/Tracker</url>
+        <connection>scm:git:git@github.com:thekeenant/Tracker.git</connection>
+        <developerConnection>scm:git:git@github.com:thekeenant/Tracker.git</developerConnection>
+        <url>https://github.com/thekeenant/Tracker</url>
     </scm>
+
     <distributionManagement>
         <repository>
-            <id>overcast-deployment</id>
-            <url>https://repo.oc.tc/content/repositories/releases</url>
+            <id>avicus-repo</id>
+            <url>https://repo.avicus.net/content/repositories/releases/</url>
         </repository>
         <snapshotRepository>
-            <id>overcast-deployment</id>
-            <url>https://repo.oc.tc/content/repositories/snapshots</url>
+            <id>avicus-repo</id>
+            <url>https://repo.avicus.net/content/repositories/snapshots/</url>
         </snapshotRepository>
     </distributionManagement>
+
     <repositories>
         <repository>
             <id>overcast</id>
             <url>https://repo.oc.tc/content/groups/public</url>
         </repository>
+        <repository>
+            <id>avicus-repo</id>
+            <url>https://repo.avicus.net/content/groups/public</url>
+        </repository>
     </repositories>
+
     <dependencies>
         <dependency>
-            <groupId>tc.oc</groupId>
-            <artifactId>sportbukkit-api</artifactId>
-            <version>1.7.9-R0.1-SNAPSHOT</version>
+            <groupId>com.github</groupId>
+            <artifactId>paperspigot</artifactId>
+            <version>1.8.8</version>
         </dependency>
         <dependency>
             <groupId>com.google.guava</groupId>
