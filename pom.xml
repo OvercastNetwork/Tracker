@@ -7,9 +7,9 @@
     <description>Bukkit plugin and API for tracking entity damage and deaths.</description>
 
     <scm>
-        <connection>scm:git:git@github.com:thekeenant/Tracker.git</connection>
-        <developerConnection>scm:git:git@github.com:thekeenant/Tracker.git</developerConnection>
-        <url>https://github.com/thekeenant/Tracker</url>
+        <connection>scm:git:git@github.com:Avicus/Tracker.git</connection>
+        <developerConnection>scm:git:git@github.com:Avicus/Tracker.git</developerConnection>
+        <url>https://github.com/Avicus/Tracker</url>
     </scm>
 
     <distributionManagement>
