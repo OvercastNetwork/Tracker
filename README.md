@@ -1,5 +1,6 @@
 Tracker
 =======
+[![Build Status](https://ci.avicus.net/job/Tracker/badge/icon)](https://ci.avicus.net/job/Tracker/)
 
 Bukkit plugin and API for tracking entity damage.
 
