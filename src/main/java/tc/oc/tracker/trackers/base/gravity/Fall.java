@@ -4,8 +4,8 @@ import org.bukkit.entity.LivingEntity;
 import org.bukkit.entity.Player;
 
 public class Fall {
-    public static enum Cause { HIT, SHOOT, SPLEEF }
-    public static enum From { FLOOR, LADDER, WATER }
+    public enum Cause { HIT, SHOOT, SPLEEF }
+    public enum From { FLOOR, LADDER, WATER }
 
     // The falling player
     final public Player victim;
@@ -27,9 +27,6 @@ public class Fall {
     // This is used to distinguish the initial knockback/spleef from ground touches that occur during the fall.
     public boolean isFalling;
 
-    // Time the player last transitioned from off-ground to on-ground
-    public long onGroundTime;
-
     // The player's most recent swimming state and the time it was last set true
     public boolean isSwimming;
     public long swimmingTime;
@@ -50,7 +47,7 @@ public class Fall {
         this.cause = cause;
         this.victim = victim;
         this.from = from;
-        this.attackTime = this.swimmingTime = this.climbingTime = this.onGroundTime = attackTime;
+        this.attackTime = this.swimmingTime = this.climbingTime = attackTime;
         this.groundTouchCount = 0;
     }
 }

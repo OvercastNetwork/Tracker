@@ -1,9 +1,5 @@
 package tc.oc.tracker.trackers.base.gravity;
 
-import java.util.HashMap;
-import java.util.Iterator;
-import javax.annotation.Nonnull;
-
 import org.bukkit.Location;
 import org.bukkit.Material;
 import org.bukkit.World;
@@ -13,11 +9,14 @@ import org.bukkit.entity.LivingEntity;
 import org.bukkit.entity.Player;
 import org.bukkit.entity.Projectile;
 import org.bukkit.event.entity.EntityDamageEvent;
-
 import tc.oc.tracker.base.AbstractTracker;
 import tc.oc.tracker.plugin.TrackerPlugin;
 import tc.oc.tracker.timer.TickTimer;
 import tc.oc.tracker.util.PlayerBlockChecker;
+
+import javax.annotation.Nonnull;
+import java.util.HashMap;
+import java.util.Iterator;
 
 public class SimpleGravityKillTracker extends AbstractTracker {
     private final HashMap<Location, BrokenBlock> brokenBlocks = new HashMap<>();
@@ -25,14 +24,11 @@ public class SimpleGravityKillTracker extends AbstractTracker {
 
     // A player must leave the ground within this many ticks of being attacked for
     // the fall to be caused by knockback from that attack
-    public static final long MAX_KNOCKBACK_TIME = 20;
+    public static final long MAX_KNOCKBACK_TIME = 50;
 
     // A player must leave the ground within this many ticks of a block being broken
     // under them for the fall to be caused by a spleef from that block
     public static final long MAX_SPLEEF_TIME = 20;
-
-    // A player's fall is cancelled if they are on the ground continuously for more than this many ticks
-    public static final long MAX_ON_GROUND_TIME = 10;
 
     // A player's fall is cancelled if they touch the ground more than this many times
     public static final long MAX_GROUND_TOUCHES = 2;
@@ -53,17 +49,16 @@ public class SimpleGravityKillTracker extends AbstractTracker {
 
     public void clear(@Nonnull World world) {
         Iterator<Location> blocks = this.brokenBlocks.keySet().iterator();
-        while(blocks.hasNext()) {
-            Location loc = blocks.next();
-            if(loc.getWorld() == world) {
+        while (blocks.hasNext()) {
+            Location location = blocks.next();
+            if (location.getWorld() == world)
                 blocks.remove();
-            }
         }
 
         Iterator<Player> players = this.falls.keySet().iterator();
-        while(players.hasNext()) {
+        while (players.hasNext()) {
             Player player = players.next();
-            if(player.getWorld() == world) {
+            if (player.getWorld() == world) {
                 players.remove();
             }
         }
@@ -79,20 +74,29 @@ public class SimpleGravityKillTracker extends AbstractTracker {
 
     private void checkFallCancelled(final Fall fall) {
         long now = this.timer.getTicks();
-        if(this.falls.get(fall.victim) == fall) {
-            if(fall.isFalling) {
+
+        if (this.falls.get(fall.victim) == fall) {
+            if (fall.isFalling) {
                 if (!fall.isInLava) {
-                    if (fall.victim.isOnGround()) {
-                        if(now - fall.onGroundTime > MAX_ON_GROUND_TIME) this.cancelFall(fall);
-                        if(fall.groundTouchCount > MAX_GROUND_TOUCHES) this.cancelFall(fall);
-                    }
-                    if (fall.isSwimming && now - fall.swimmingTime > MAX_SWIMMING_TIME) this.cancelFall(fall);
-                    if (fall.isClimbing && now - fall.climbingTime > MAX_CLIMBING_TIME) this.cancelFall(fall);
+                    if (fall.victim.isOnGround() && fall.groundTouchCount > MAX_GROUND_TOUCHES)
+                        this.cancelFall(fall);
+
+                    if (fall.isSwimming && now - fall.swimmingTime > MAX_SWIMMING_TIME)
+                        this.cancelFall(fall);
+
+                    if (fall.isClimbing && now - fall.climbingTime > MAX_CLIMBING_TIME)
+                        this.cancelFall(fall);
                 }
-            } else {
-                if (fall.victim.isOnGround() && now - fall.attackTime > MAX_KNOCKBACK_TIME) this.cancelFall(fall);
-                if (fall.isSwimming && now - fall.attackTime > MAX_KNOCKBACK_TIME) this.cancelFall(fall);
-                if (fall.isClimbing && now - fall.attackTime > MAX_KNOCKBACK_TIME) this.cancelFall(fall);
+            }
+            else {
+                if (fall.victim.isOnGround() && now - fall.attackTime > MAX_KNOCKBACK_TIME)
+                    this.cancelFall(fall);
+
+                if (fall.isSwimming && now - fall.attackTime > MAX_KNOCKBACK_TIME)
+                    this.cancelFall(fall);
+
+                if (fall.isClimbing && now - fall.attackTime > MAX_KNOCKBACK_TIME)
+                    this.cancelFall(fall);
             }
         }
     }
@@ -120,7 +124,7 @@ public class SimpleGravityKillTracker extends AbstractTracker {
      * i.e. damage from another entity that causes knockback
      */
     public void playerAttacked(Player victim, Entity attacker) {
-        if(this.falls.containsKey(victim)) {
+        if (this.falls.containsKey(victim)) {
             // A new fall can't be initiated if the victim is already falling
             return;
         }
@@ -132,24 +136,27 @@ public class SimpleGravityKillTracker extends AbstractTracker {
 
         // Figure out the entity responsible for the attack and bail if it's not living
         Fall.Cause cause;
-        if(attacker instanceof Projectile && ((Projectile) attacker).getShooter() instanceof LivingEntity) {
+        if (attacker instanceof Projectile && ((Projectile) attacker).getShooter() instanceof LivingEntity) {
             attacker = (LivingEntity) ((Projectile) attacker).getShooter();
             cause = Fall.Cause.SHOOT;
-        } else {
+        }
+        else {
             cause = Fall.Cause.HIT;
         }
 
-        if(!(attacker instanceof LivingEntity)) {
+        if (!(attacker instanceof LivingEntity)) {
             return;
         }
 
         // Note the victim's situation when the attack happened
-        Fall.From from = null;
-        if(isClimbing) {
+        Fall.From from;
+        if (isClimbing) {
             from = Fall.From.LADDER;
-        } else if(isSwimming) {
+        }
+        else if(isSwimming) {
             from = Fall.From.WATER;
-        } else {
+        }
+        else {
             from = Fall.From.FLOOR;
         }
 
@@ -175,7 +182,7 @@ public class SimpleGravityKillTracker extends AbstractTracker {
      */
     public void blockBroken(Block block, Player breaker) {
         Material material = block.getType();
-        if(!material.isSolid()) {
+        if (!material.isSolid()) {
             return;
         }
         // Bukkit considers these "solid" for some reason
@@ -207,7 +214,7 @@ public class SimpleGravityKillTracker extends AbstractTracker {
      * Called when a player moves in a way that could affect their fall i.e. landing on a ladder or in liquid
      */
     public void playerMoved(Player player, Location to) {
-        if(this.falls.containsKey(player)) {
+        if (this.falls.containsKey(player)) {
             Fall fall = this.falls.get(player);
 
             boolean isClimbing = PlayerBlockChecker.isClimbing(to);
@@ -215,17 +222,18 @@ public class SimpleGravityKillTracker extends AbstractTracker {
             boolean isInLava = PlayerBlockChecker.isSwimming(to, Material.LAVA);
             boolean becameAirborne = false;
 
-            if(isClimbing != fall.isClimbing) {
-                if((fall.isClimbing = isClimbing)) {
+            if (isClimbing != fall.isClimbing) {
+                if ((fall.isClimbing = isClimbing)) {
                     // Player moved onto a ladder, cancel the fall if they are still on it after MAX_CLIMBING_TIME
                     fall.climbingTime = this.timer.getTicks();
                     this.scheduleCheckFallCancelled(fall, MAX_CLIMBING_TIME + 1);
-                } else {
+                }
+                else {
                     becameAirborne = true;
                 }
             }
 
-            if(isSwimming != fall.isSwimming) {
+            if (isSwimming != fall.isSwimming) {
                 if((fall.isSwimming = isSwimming)) {
                     // Player moved into water, cancel the fall if they are still in it after MAX_SWIMMING_TIME
                     fall.swimmingTime = this.timer.getTicks();
@@ -235,15 +243,16 @@ public class SimpleGravityKillTracker extends AbstractTracker {
                 }
             }
 
-            if(becameAirborne) {
+            if (becameAirborne) {
                 // Player moved out of water or off a ladder, check if it was caused by the attack
                 this.playerBecameAirborne(fall);
             }
 
-            if(isInLava != fall.isInLava) {
-                if((fall.isInLava = isInLava)) {
+            if (isInLava != fall.isInLava) {
+                if ((fall.isInLava = isInLava)) {
                     fall.inLavaTime = this.timer.getTicks();
-                } else {
+                }
+                else {
                     // Because players continue to "fall" as long as they are in lava, moving out of lava
                     // can immediately end their fall
                     this.checkFallCancelled(fall);
@@ -257,18 +266,13 @@ public class SimpleGravityKillTracker extends AbstractTracker {
      */
     public void playerOnOrOffGround(Player player, boolean onGround) {
         Fall fall = this.falls.get(player);
-        if(fall != null) {
-            if(onGround) {
-                // Falling player landed on the ground, cancel the fall if they are still there after MAX_ON_GROUND_TIME
-                fall.onGroundTime = this.timer.getTicks();
-                fall.groundTouchCount++;
-                this.scheduleCheckFallCancelled(fall, MAX_ON_GROUND_TIME + 1);
-            } else {
+        if (fall != null) {
+            if (!onGround) {
                 // Falling player left the ground, check if it was caused by the attack
                 this.playerBecameAirborne(fall);
             }
-
-        } else if(!onGround) {
+        }
+        else if(!onGround) {
             // Player that is not currently falling left the ground, check if it was caused by a spleef
             BrokenBlock brokenBlock = BrokenBlock.lastBlockBrokenUnderPlayer(player, this.brokenBlocks);
             if(brokenBlock != null && this.timer.getTicks() - brokenBlock.time <= MAX_SPLEEF_TIME) {
@@ -299,26 +303,25 @@ public class SimpleGravityKillTracker extends AbstractTracker {
      */
     public Fall getCausingFall(Player victim, EntityDamageEvent.DamageCause damageCause) {
         Fall fall = this.falls.get(victim);
-        if(fall == null || !fall.isFalling) {
+
+        if (fall == null || !fall.isFalling) {
             return null;
         }
 
         // Do an extra check to see if the fall should be cancelled
         this.checkFallCancelled(fall);
-        if(!this.falls.containsKey(victim)) {
+        if (!this.falls.containsKey(victim)) {
             return null;
         }
 
-        switch(damageCause) {
+        switch (damageCause) {
             case VOID:
             case FALL:
             case LAVA:
             case SUICIDE:
                 return fall;
-
             case FIRE_TICK:
                 return fall.isInLava ? fall : null;
-
             default:
                 return null;
         }
