@@ -12,7 +12,6 @@ public class PlayerOnGroundEvent extends PlayerEvent {
         super(player);
         this.onGround = onGround;
     }
-
     /**
      * Returns true of the player is on the ground after the event
      *

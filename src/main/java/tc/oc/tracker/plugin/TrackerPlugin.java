@@ -20,7 +20,6 @@ import tc.oc.tracker.damage.resolvers.OwnedMobDamageResolver;
 import tc.oc.tracker.damage.resolvers.ProjectileDamageResolver;
 import tc.oc.tracker.damage.resolvers.TNTDamageResolver;
 import tc.oc.tracker.damage.resolvers.VoidDamageResolver;
-import tc.oc.tracker.timer.OnGroundTask;
 import tc.oc.tracker.timer.TickTimer;
 import tc.oc.tracker.trackers.AnvilTracker;
 import tc.oc.tracker.trackers.DispenserTracker;
@@ -36,17 +35,10 @@ import tc.oc.tracker.trackers.base.gravity.SimpleGravityKillTracker;
 
 public class TrackerPlugin extends JavaPlugin {
     public @Nullable TickTimer tickTimer;
-    public @Nullable OnGroundTask onGroundTask;
 
     @Override
     public void onDisable() {
         Trackers.getManager().clearTracker(ExplosiveTracker.class, SimpleExplosiveTracker.class);
-
-        if (this.tickTimer != null)
-            this.tickTimer.stop();
-
-        if (this.onGroundTask != null)
-            this.onGroundTask.stop();
     }
 
     @Override
@@ -62,10 +54,6 @@ public class TrackerPlugin extends JavaPlugin {
         // initialize timer
         this.tickTimer = new TickTimer(this);
         this.tickTimer.start();
-
-        // on ground task
-        this.onGroundTask = new OnGroundTask(this);
-        this.onGroundTask.start();
 
         // tracker setup
         TrackerManager tm = Trackers.getManager();

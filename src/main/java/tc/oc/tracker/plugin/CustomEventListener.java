@@ -12,6 +12,7 @@ import org.bukkit.event.player.PlayerMoveEvent;
 import tc.oc.tracker.event.BlockDispenseEntityEvent;
 import tc.oc.tracker.event.BlockFallEvent;
 import tc.oc.tracker.event.PlayerCoarseMoveEvent;
+import tc.oc.tracker.event.PlayerOnGroundEvent;
 import tc.oc.tracker.util.EventUtil;
 
 public class CustomEventListener implements Listener {
@@ -69,5 +70,23 @@ public class CustomEventListener implements Listener {
         event.setCancelled(call.isCancelled());
         event.setFrom(call.getFrom());
         event.setTo(call.getTo());
+    }
+
+    @EventHandler(priority = EventPriority.MONITOR, ignoreCancelled = true)
+    public void onPlayerOnGroundCall(PlayerCoarseMoveEvent event) {
+        Material belowFrom = event.getFrom().clone().add(0, -1, 0).getBlock().getType();
+        Material belowTo = event.getTo().clone().add(0, -1, 0).getBlock().getType();
+
+        PlayerOnGroundEvent call;
+
+        if (belowFrom != Material.AIR && belowTo == Material.AIR)
+            call = new PlayerOnGroundEvent(event.getPlayer(), false);
+        else if (belowFrom == Material.AIR && belowTo != Material.AIR)
+            call = new PlayerOnGroundEvent(event.getPlayer(), true);
+        else
+            return;
+
+        for (EventPriority priority : EventPriority.values())
+            EventUtil.callEvent(call, PlayerOnGroundEvent.getHandlerList(), priority);
     }
 }
