@@ -1,9 +1,11 @@
 package tc.oc.tracker.plugin;
 
+import org.bukkit.Bukkit;
 import org.bukkit.Location;
 import org.bukkit.Material;
 import org.bukkit.block.Block;
 import org.bukkit.entity.FallingBlock;
+import org.bukkit.entity.Player;
 import org.bukkit.event.EventHandler;
 import org.bukkit.event.EventPriority;
 import org.bukkit.event.Listener;
@@ -23,27 +25,39 @@ public class CustomEventListener implements Listener {
 
     public CustomEventListener(TrackerPlugin plugin) {
         this.plugin = plugin;
+
+        Bukkit.getServer().getScheduler().runTaskTimer(plugin, new Runnable() {
+            @Override
+            public void run() {
+                for (Player player : Bukkit.getOnlinePlayers())
+                    updateOnGroundStatus(player);
+            }
+        }, 0, 20);
     }
 
-    @EventHandler(priority = EventPriority.MONITOR, ignoreCancelled = true)
-    public void onPlayerOnGroundCall(PlayerCoarseMoveEvent event) {
-        boolean groundBefore = event.getPlayer().isOnGround();
-        boolean groundAfter = event.getPlayer().isOnGround();
+    private void updateOnGroundStatus(Player player) {
+        boolean groundAfter = player.isOnGround();
+        boolean groundBefore = player.isOnGround();
 
         // Fetch previous on ground state
-        if (event.getPlayer().hasMetadata(METADATA_GROUND)) {
-            groundBefore = event.getPlayer().getMetadata(METADATA_GROUND).get(0).asBoolean();
+        if (player.hasMetadata(METADATA_GROUND)) {
+            groundBefore = player.getMetadata(METADATA_GROUND).get(0).asBoolean();
         }
 
         // If on ground state changed, store it and call the event.
-        if (groundBefore != groundAfter) {
-            event.getPlayer().setMetadata(METADATA_GROUND, new FixedMetadataValue(this.plugin, groundAfter));
+        if (!player.hasMetadata(METADATA_GROUND) || groundBefore != groundAfter) {
+            player.setMetadata(METADATA_GROUND, new FixedMetadataValue(this.plugin, groundAfter));
 
-            PlayerOnGroundEvent call = new PlayerOnGroundEvent(event.getPlayer(), groundAfter);
+            PlayerOnGroundEvent call = new PlayerOnGroundEvent(player, groundAfter);
 
             for (EventPriority priority : EventPriority.values())
                 EventUtil.callEvent(call, PlayerOnGroundEvent.getHandlerList(), priority);
         }
+    }
+
+    @EventHandler(priority = EventPriority.MONITOR, ignoreCancelled = true)
+    public void onPlayerOnGroundCall(PlayerCoarseMoveEvent event) {
+        updateOnGroundStatus(event.getPlayer());
     }
 
     @EventHandler(priority = EventPriority.MONITOR, ignoreCancelled = true)
