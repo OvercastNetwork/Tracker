@@ -4,6 +4,7 @@ import javax.annotation.Nonnull;
 
 import org.bukkit.Location;
 import org.bukkit.entity.LivingEntity;
+import org.bukkit.entity.Player;
 import org.bukkit.event.*;
 import org.bukkit.plugin.EventExecutor;
 import org.bukkit.plugin.Plugin;
@@ -15,6 +16,7 @@ import tc.oc.tracker.DamageResolvers;
 import tc.oc.tracker.Lifetime;
 import tc.oc.tracker.Lifetimes;
 import tc.oc.tracker.event.EntityDamageEvent;
+import tc.oc.tracker.event.PlayerDamageEvent;
 import tc.oc.tracker.util.EventUtil;
 
 import com.google.common.base.Preconditions;
@@ -65,7 +67,10 @@ public class EntityDamageEventListener implements Listener {
                 Instant time = Instant.now();
                 DamageInfo info = DamageResolvers.getManager().resolve(entity, lifetime, bukkit);
 
-                our = new EntityDamageEvent(entity, lifetime, hearts, location, time, info);
+                if (entity instanceof Player)
+                    our = new PlayerDamageEvent((Player) entity, lifetime, hearts, location, time, info);
+                else
+                    our = new EntityDamageEvent(entity, lifetime, hearts, location, time, info);
                 helper.setOurEvent(bukkit, our);
             }
 

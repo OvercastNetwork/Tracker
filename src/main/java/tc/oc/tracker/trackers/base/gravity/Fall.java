@@ -2,7 +2,6 @@ package tc.oc.tracker.trackers.base.gravity;
 
 import org.bukkit.entity.LivingEntity;
 import org.bukkit.entity.Player;
-import org.bukkit.scheduler.BukkitTask;
 
 public class Fall {
     public static enum Cause { HIT, SHOOT, SPLEEF }

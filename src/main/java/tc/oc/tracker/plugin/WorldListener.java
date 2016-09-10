@@ -1,16 +1,14 @@
 package tc.oc.tracker.plugin;
 
-import javax.annotation.Nonnull;
-
+import com.google.common.base.Preconditions;
 import org.bukkit.event.EventHandler;
 import org.bukkit.event.EventPriority;
 import org.bukkit.event.Listener;
 import org.bukkit.event.world.WorldUnloadEvent;
-
 import tc.oc.tracker.Tracker;
 import tc.oc.tracker.TrackerManager;
 
-import com.google.common.base.Preconditions;
+import javax.annotation.Nonnull;
 
 public class WorldListener implements Listener {
     private final @Nonnull TrackerManager manager;

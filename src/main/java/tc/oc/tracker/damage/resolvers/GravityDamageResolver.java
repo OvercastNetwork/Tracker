@@ -5,14 +5,12 @@ import javax.annotation.Nullable;
 
 import org.bukkit.entity.LivingEntity;
 import org.bukkit.entity.Player;
-import org.bukkit.event.entity.EntityDamageByEntityEvent;
 import org.bukkit.event.entity.EntityDamageEvent;
 
 import tc.oc.tracker.DamageInfo;
 import tc.oc.tracker.DamageResolver;
 import tc.oc.tracker.Lifetime;
 import tc.oc.tracker.damage.GravityDamageInfo;
-import tc.oc.tracker.timer.TickTimer;
 import tc.oc.tracker.trackers.base.gravity.Fall;
 import tc.oc.tracker.trackers.base.gravity.SimpleGravityKillTracker;
 
