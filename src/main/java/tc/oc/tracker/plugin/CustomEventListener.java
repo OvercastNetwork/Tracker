@@ -9,6 +9,7 @@ import org.bukkit.event.EventPriority;
 import org.bukkit.event.Listener;
 import org.bukkit.event.entity.EntitySpawnEvent;
 import org.bukkit.event.player.PlayerMoveEvent;
+import org.bukkit.metadata.FixedMetadataValue;
 import tc.oc.tracker.event.BlockDispenseEntityEvent;
 import tc.oc.tracker.event.BlockFallEvent;
 import tc.oc.tracker.event.PlayerCoarseMoveEvent;
@@ -16,6 +17,35 @@ import tc.oc.tracker.event.PlayerOnGroundEvent;
 import tc.oc.tracker.util.EventUtil;
 
 public class CustomEventListener implements Listener {
+    private static final String METADATA_GROUND = "tracker.on-ground";
+
+    private final TrackerPlugin plugin;
+
+    public CustomEventListener(TrackerPlugin plugin) {
+        this.plugin = plugin;
+    }
+
+    @EventHandler(priority = EventPriority.MONITOR, ignoreCancelled = true)
+    public void onPlayerOnGroundCall(PlayerCoarseMoveEvent event) {
+        boolean groundBefore = event.getPlayer().isOnGround();
+        boolean groundAfter = event.getPlayer().isOnGround();
+
+        // Fetch previous on ground state
+        if (event.getPlayer().hasMetadata(METADATA_GROUND)) {
+            groundBefore = event.getPlayer().getMetadata(METADATA_GROUND).get(0).asBoolean();
+        }
+
+        // If on ground state changed, store it and call the event.
+        if (groundBefore != groundAfter) {
+            event.getPlayer().setMetadata(METADATA_GROUND, new FixedMetadataValue(this.plugin, groundAfter));
+
+            PlayerOnGroundEvent call = new PlayerOnGroundEvent(event.getPlayer(), groundAfter);
+
+            for (EventPriority priority : EventPriority.values())
+                EventUtil.callEvent(call, PlayerOnGroundEvent.getHandlerList(), priority);
+        }
+    }
+
     @EventHandler(priority = EventPriority.MONITOR, ignoreCancelled = true)
     public void onBlockFallCall(EntitySpawnEvent event) {
         if (event.getEntity() instanceof FallingBlock) {
@@ -70,23 +100,5 @@ public class CustomEventListener implements Listener {
         event.setCancelled(call.isCancelled());
         event.setFrom(call.getFrom());
         event.setTo(call.getTo());
-    }
-
-    @EventHandler(priority = EventPriority.MONITOR, ignoreCancelled = true)
-    public void onPlayerOnGroundCall(PlayerCoarseMoveEvent event) {
-        Material belowFrom = event.getFrom().clone().add(0, -1, 0).getBlock().getType();
-        Material belowTo = event.getTo().clone().add(0, -1, 0).getBlock().getType();
-
-        PlayerOnGroundEvent call;
-
-        if (belowFrom != Material.AIR && belowTo == Material.AIR)
-            call = new PlayerOnGroundEvent(event.getPlayer(), false);
-        else if (belowFrom == Material.AIR && belowTo != Material.AIR)
-            call = new PlayerOnGroundEvent(event.getPlayer(), true);
-        else
-            return;
-
-        for (EventPriority priority : EventPriority.values())
-            EventUtil.callEvent(call, PlayerOnGroundEvent.getHandlerList(), priority);
     }
 }

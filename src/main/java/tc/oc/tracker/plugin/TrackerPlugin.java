@@ -46,7 +46,7 @@ public class TrackerPlugin extends JavaPlugin {
         // basic operation listeners
         this.registerEvents(new LifetimeListener());
         this.registerEvents(new WorldListener(Trackers.getManager()));
-        this.registerEvents(new CustomEventListener());
+        this.registerEvents(new CustomEventListener(this));
 
         EntityDamageEventListener damageEventListener = new EntityDamageEventListener();
         damageEventListener.register(this);
